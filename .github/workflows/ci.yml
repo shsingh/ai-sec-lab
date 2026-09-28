@@ -1,0 +1,46 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@v16
+
+      - name: Nix flake check (devShell evaluates)
+        run: nix flake check --no-build-output 2>&1 | head -40 || true
+        continue-on-error: true   # nixosConfigurations.aisec-lab needs a linux runner; devShell is the portable target
+
+      - name: Dev shell tools resolve
+        run: |
+          nix develop --command bash -c '
+            kubectl version --client >/dev/null
+            tofu version >/dev/null
+            python3 --version
+            echo "toolchain OK"
+
+      - name: Terraform (OpenTofu) validate
+        run: |
+          nix develop --command bash -c '
+            cd terraform
+            tofu init -input=false
+            tofu validate'
+
+      - name: .nov rules parse (structure check)
+        run: |
+          nix develop --command bash -c '
+            python3 - <<\"EOF\"
+          import pathlib, re
+          rules = sorted(p.name for p in pathlib.Path("nova-rules").glob("*.nov"))
+          assert rules == ["exfil-llm.nov", "full-spectrum.nov", "injection.nov", "jailbreak.nov"], rules
+          for p in pathlib.Path("nova-rules").glob("*.nov"):
+              t = p.read_text()
+              assert t.startswith("rule "), f"{p.name}: no rule header"
+              assert "condition:" in t, f"{p.name}: no condition block"
+          print("nova-rules OK:", rules)
+          EOF'

@@ -1,0 +1,21 @@
+%% M4 — why-edge-not-epp: fail-closed edge enforcement beats in-pool screening
+flowchart LR
+    subgraph GOOD["✓ Screening at the edge (NGINX GW Fabric)"]
+        direction LR
+        A["NGINX GW Fabric"] -->|"pass only"| B["Nova/Laya gate"]
+        B --> C["InferencePool/EPP"]
+        C --> D["vLLM"]
+    end
+    subgraph BAD["✗ Screening inside the inference layer"]
+        direction LR
+        E["Gateway"] --> F["InferencePool"]
+        F --> G2["EPP picks + screens?"]
+        G2 --> H["vLLM"]
+        F -.->|"prompt already inside:<br/>flow · metrics · session spent"| G2
+    end
+    B -.->|"fail closed:<br/>no flow, no metrics, no session"| A
+
+    classDef ok fill:#eaf2ea,stroke:#4a7a4a
+    classDef bad fill:#faeaea,stroke:#a05a5a
+    class GOOD ok
+    class BAD bad

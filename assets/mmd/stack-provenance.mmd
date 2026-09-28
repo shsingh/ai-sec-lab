@@ -1,0 +1,21 @@
+%% M2 — stack-provenance: every layer is open source
+flowchart LR
+    subgraph PROV["OpenTofu (kubernetes provider)"]
+        direction TB
+        PROVBOX["provisions"]
+    end
+    subgraph RUNS["OrbStack NixOS VM — single node"]
+        direction LR
+        NGF["NGINX Gateway Fabric<br/>Gateway API v1"]
+        NOVA["NOVA framework<br/>YARA-for-prompts .nov rules"]
+        LAYA["Laya decision model<br/>Apache-2.0, open weights"]
+        SIM["llm-d-inference-sim<br/>OpenAI protocol"]
+    end
+    PROV -->|"runs"| NGF
+    PROV -.->|"runs"| NOVA
+    NOVA --> LAYA --> SIM
+
+    classDef iac fill:#f0f0f0,stroke:#999
+    classDef oss fill:#e8eef7,stroke:#5b7db1
+    class PROVBOX iac
+    class NGF,NOVA,LAYA,SIM oss

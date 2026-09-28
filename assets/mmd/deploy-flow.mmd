@@ -1,0 +1,15 @@
+%% M6 — deploy-flow: what tofu creates, in order
+flowchart TB
+    TF["tofu apply"] --> NS["namespace ai-sec"]
+    NS --> CM["ConfigMap nova-rules<br/>(.nov files)"]
+    CM --> DG["Deployment nova-gate<br/>(NOVA + Laya, CPU)"]
+    CM --> DS["Deployment llm-sim<br/>(OpenAI-protocol pool)"]
+    DG --> SG["Service nova-gate:8000"]
+    DS --> SS["Service llm-sim:8000"]
+    SG --> GW["Gateway (NGINX GW Fabric)<br/>gatewayClassName: nginx"]
+    SS --> GW
+    GW --> HR["HTTPRoute ai-sec-inbound<br/>/v1/* → Nova, then sim"]
+    HR --> LB["NodePort<br/>ai-sec.lab.internal via /etc/hosts"]
+
+    classDef k8s fill:#e8eef7,stroke:#5b7db1
+    class NS,CM,DG,DS,SG,SS,GW,HR,LB k8s

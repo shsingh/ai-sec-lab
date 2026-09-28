@@ -1,0 +1,8 @@
+# Participant toolchain — pinned python deps (installed by the flake devShell hook;
+# this file is the authoritative list for CI and manual venvs).
+nbdev>=2.3
+laya[serve]==0.3.20
+nova-hunting[semantic]    # keyword+regex+LLM core; [semantic] adds MiniLM for the semantics tier
+fastapi
+uvicorn
+httpx

@@ -1,0 +1,29 @@
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+_site/
+.quarto/
+.ipynb_checkpoints/
+notebooks/_build/
+
+# --- nix / os ---
+result
+.direnv/
+.DS_Store
+
+# --- models & runtime state (never commit weights) ---
+models/
+*.gguf
+*.safetensors
+laya_home/
+
+# --- terraform ---
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate*
+
+# --- local toolchain records / scratch ---
+.toolchain-path
+nohup.out

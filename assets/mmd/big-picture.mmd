@@ -1,0 +1,27 @@
+%% M1 — big-picture: the whole lab on one Mac, everything OSS
+%% render: flowchart, left→right
+flowchart LR
+    subgraph HOST["MacBook Pro — OrbStack"]
+        direction LR
+        subgraph K8S["Single-node Kubernetes (NixOS VM)"]
+            NGF["NGINX Gateway Fabric<br/>(Gateway API, OSS, F5)"]
+            GATE["nova-gate pod<br/>NOVA rules + Laya<br/>421M decision model"]
+            VICTIM["atlas — vulnerable<br/>support assistant<br/>(real LLM, tool calls)"]
+        end
+        OLLAMA["Ollama on macOS host<br/>(Metal GPU seam)"]
+    end
+    CURL(["curl / attack corpus"]) -->|"HTTPRoute<br/>/v1/* → Nova first"| NGF
+    NGF -->|"pass"| GATE
+    GATE -->|"pass — chat/completions"| VICTIM
+    GATE -.->|"block<br/>403 — the app never sees it"| BLOCK(["403"])
+    VICTIM -->|"chat + tools<br/>host.orb.internal:11434"| OLLAMA
+    VICTIM -.->|"exfil sink<br/>(CRM log)"| CRM(["crm.log"])
+
+    classDef edge fill:#e8eef7,stroke:#5b7db1
+    classDef gate fill:#1f6feb,stroke:#1f6feb,color:#fff
+    classDef victim fill:#fde8e8,stroke:#c0392b
+    classDef host fill:#f0f0f0,stroke:#999
+    class NGF edge
+    class GATE gate
+    class VICTIM victim
+    class OLLAMA host

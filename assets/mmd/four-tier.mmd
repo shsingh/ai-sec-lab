@@ -1,0 +1,18 @@
+%% M7 — four-tier: escalating cost, any tier can block, everything fails closed
+flowchart TB
+    IN(["incoming prompt"]) --> T1["1 · keywords<br/>exact + /regex/i<br/><1 ms · zero cost"]
+    T1 -->|"no match"| T2["2 · semantics<br/>MiniLM cosine (0.62)<br/>~15 ms · 90 MB model"]
+    T2 -->|"no match"| T3["3 · llm judge<br/>natural-language question<br/>Ollama llama3.2:3b · ~200 ms+"]
+    T3 -->|"no match"| T4["4 · Laya decision model<br/>injection / jailbreak / benign<br/>~40 ms"]
+    T4 -->|"benign"| PASS(["pass → pool"])
+    T1 -->|"match"| BLOCK(["403 — fail closed"])
+    T2 -->|"match"| BLOCK
+    T3 -->|"match"| BLOCK
+    T4 -->|"match"| BLOCK
+
+    classDef tier fill:#e8eef7,stroke:#5b7db1
+    classDef pass fill:#eaf2ea,stroke:#4a7a4a
+    classDef block fill:#faeaea,stroke:#a05a5a
+    class T1,T2,T3,T4 tier
+    class PASS pass
+    class BLOCK block

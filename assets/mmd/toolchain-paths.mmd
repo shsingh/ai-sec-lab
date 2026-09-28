@@ -1,0 +1,15 @@
+%% M5 — toolchain-paths: the flake pins everything; one path on NixOS
+flowchart TB
+    REPO["ai-sec-lab repo<br/>flake.nix + flake.lock"] --> DEV["nix develop<br/>(in the VM)"]
+    DEV --> TOOLS["kubectl · helm · opentofu<br/>python3.12 · nbdev · nodejs_22 · jq · yq"]
+    TOOLS --> TEST["nbdev_test<br/>every acceptance cell"]
+    subgraph VM["NixOS VM (aisec-lab)"]
+        K3S["k3s single node"]
+        DOCKER["docker (image builds)"]
+    end
+    REPO -->|"sudo nixos-rebuild switch<br/>--flake .#aisec-lab"| VM
+
+    classDef repo fill:#f0f0f0,stroke:#999
+    classDef vm fill:#e8eef7,stroke:#5b7db1
+    class REPO,DEV,TOOLS,TEST repo
+    class K3S,DOCKER vm

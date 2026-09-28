@@ -1,0 +1,27 @@
+%% M3 — request-lifecycle: one prompt's journey through the gate
+sequenceDiagram
+    autonumber
+    participant C as curl
+    participant NGF as NGINX Gateway Fabric (edge)
+    participant G as Nova gate
+    participant N as NOVA evaluators
+    participant L as Laya (decision model)
+    participant S as llm-sim (pool)
+
+    C->>NGF: POST /v1/completions
+    NGF->>G: HTTPRoute → backendRef
+    G->>N: scan prompt (.nov rules)
+    N-->>G: keyword <1ms · semantic ~15ms
+    alt NOVA rule matches
+        G--xC: 403 (fail closed) — pool never sees it
+    else no rule match
+        G->>L: typed questions (choice + boolean)
+        L-->>G: verdict + calibrated probability
+        alt verdict ≠ benign
+            G--xC: 403 (Laya block)
+        else benign
+            G->>S: forward completion request
+            S-->>G: 200 completion
+            G-->>C: 200 + X-AI-Verdict header
+        end
+    end

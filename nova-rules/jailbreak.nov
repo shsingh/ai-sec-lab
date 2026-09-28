@@ -1,0 +1,16 @@
+rule Jailbreak_DirectOverride
+{
+    meta:
+        description = "Instruction-override and persona-switch attempts"
+        author      = "ai-sec-lab"
+        severity    = "high"
+    keywords:
+        $k1 = "ignore previous instructions"
+        $k2 = "ignore all previous"
+        $k3 = "disregard all prior"
+        $k4 = "forget everything above"
+        $k5 = "you are now in developer mode"
+        $k6 = "reveal the system prompt"
+    condition:
+        any of keywords.$k*
+}

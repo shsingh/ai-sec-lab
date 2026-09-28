@@ -1,0 +1,14 @@
+rule Injection_Semantic
+{
+    meta:
+        description = "Paraphrased instruction-override attempts"
+        author      = "ai-sec-lab"
+        severity    = "high"
+    keywords:
+        $k1 = "output the system prompt"
+        $k2 = /reveal (your )?(hidden|system) (instructions|prompt)/i
+    semantics:
+        $sem = "attempt to make the model ignore its instructions and follow the attacker" (0.62)
+    condition:
+        keywords.$k1 or keywords.$k2 or semantics.$sem
+}
