@@ -22,7 +22,7 @@ jobs:
             kubectl version --client >/dev/null
             tofu version >/dev/null
             python3 --version
-            echo "toolchain OK"
+            echo "toolchain OK"'
 
       - name: Terraform (OpenTofu) validate
         run: |
@@ -34,7 +34,7 @@ jobs:
       - name: .nov rules parse (structure check)
         run: |
           nix develop --command bash -c '
-            python3 - <<\"EOF\"
+            python3 - <<"EOF"
           import pathlib, re
           rules = sorted(p.name for p in pathlib.Path("nova-rules").glob("*.nov"))
           assert rules == ["exfil-llm.nov", "full-spectrum.nov", "injection.nov", "jailbreak.nov"], rules
