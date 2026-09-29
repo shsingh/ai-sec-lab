@@ -1,4 +1,4 @@
-# AI-Sec Inbound Lab — Laya + NOVA Prompt Protection on Kubernetes
+# AI Security using OSS tools with Macbook Pro — Laya + NOVA Prompt Protection on Kubernetes
 ## NixOS on OrbStack (hybrid Metal)
 
 **A standalone, executable, test-driven implementation guide — the whole lab is an nbdev notebook.**
@@ -97,7 +97,7 @@ participant devShell:
 
 ```nix
 {
-  description = "AI-Sec Inbound Lab — Laya + NOVA on NixOS (OrbStack), hybrid Metal";
+  description = "AI Security using OSS tools with Macbook Pro — Laya + NOVA on NixOS (OrbStack), hybrid Metal";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -179,7 +179,7 @@ ai-sec-lab/
 [DEFAULT]
 lib_name = ai_sec_lab
 user = ai-sec-lab
-description = AI-sec inbound lab: Laya + NOVA behind a Gateway API edge (NixOS edition)
+description = AI security using OSS tools with Macbook Pro: Laya + NOVA behind a Gateway API edge (NixOS edition)
 keywords = kubernetes, llm, guardrails, gateway-api, nova, laya, nixos
 tst_flags = slow
 nbs_path = notebooks
