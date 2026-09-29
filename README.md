@@ -1,5 +1,15 @@
 # AI-Sec Inbound Lab
 
+[![License](https://img.shields.io/github/license/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/blob/main/LICENSE)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/graphs/commit-activity)
+[![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/shsingh/ai-sec-lab)](https://libraries.io/github/shsingh/ai-sec-lab)
+
+[![ci](https://github.com/shsingh/ai-sec-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/ci.yml)
+[![dep-contract](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml)
+[![Dependency Review](https://github.com/shsingh/ai-sec-lab/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dependency-review.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/shsingh/ai-sec-lab/main.svg)](https://results.pre-commit.ci/latest/github/shsingh/ai-sec-lab/main)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/shsingh/ai-sec-lab/badge)](https://api.securityscorecards.dev/projects/github.com/shsingh/ai-sec-lab)
+
 A single-node AI prompt-security lab you can run on one Apple-Silicon
 MacBook: a real Kubernetes edge, a real policy gate, a real LLM
 application — and a real attack that gets through when the gate is
