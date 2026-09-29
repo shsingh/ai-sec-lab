@@ -10,9 +10,9 @@ RULES_DIR   = Path(os.environ.get("NOVA_RULES_DIR", "/rules"))
 BLOCK       = int(os.environ.get("BLOCK_STATUS", "403"))
 UPSTREAM    = os.environ.get("SIM_UPSTREAM", "http://atlas.ai-sec.svc.cluster.local:8080")
 LAYA_DEVICE = os.environ.get("LAYA_DEVICE", "cpu")
-# LLM tier endpoint: Ollama (OpenAI-compatible) — native on the macOS host (Metal).
-# From inside the cluster the pod reaches it via host.orb.internal (OrbStack DNS).
-OLLAMA_URL  = os.environ.get("OLLAMA_URL", "http://host.orb.internal:11434/v1")
+# NOVA's LLM tier: provider "ollama" reads OLLAMA_HOST (host:port root, no /v1);
+# exfiltration-llm.nov carries an llm pattern, so this must exist or init fails.
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://host.orb.internal:11434")
 LLM_MODEL   = os.environ.get("NOVA_LLM_MODEL", "llama3.2:3b")
 
 router = Router(preload=True, device=LAYA_DEVICE)
@@ -24,8 +24,8 @@ nova = Nova(
         "Exfil":        {"action": "block"},
         "FullSpectrum": {"action": "block"},
     },
-    llm_provider="openai",                    # NOVA speaks OpenAI protocol; Ollama exposes it too
-    llm_config={"base_url": OLLAMA_URL, "model": LLM_MODEL, "api_key": "ollama"},
+    llm_provider="ollama",                    # NOVA's ollama evaluator: {OLLAMA_HOST}/api/chat
+    llm_model=LLM_MODEL,
 )
 QUESTIONS = [{
     "name": "prompt_safety", "type": "choice",
