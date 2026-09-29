@@ -160,7 +160,7 @@ resource "kubernetes_service" "atlas" {
 
 # Gateway API CRDs (if the cluster lacks them):
 #   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
-# Edge: NGINX Gateway Fabric (OSS, F5) — arm64 images, containerd runtime (no docker daemon needed):
+# Edge: NGINX Gateway Fabric (FOSS, F5) — arm64 images, containerd runtime (no docker daemon needed):
 #   kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v2.0.0/deploy/crds.yaml
 #   kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v2.0.0/deploy/default/deploy.yaml
 # (helm is the path that pins the port; chart = oci://ghcr.io/nginx/charts/nginx-gateway-fabric)

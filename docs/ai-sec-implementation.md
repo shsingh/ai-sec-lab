@@ -1,9 +1,9 @@
-# AI Security using OSS tools with Macbook Pro — Laya + NOVA Prompt Protection on Kubernetes
+# AI Security using FOSS tools with Macbook Pro — Laya + NOVA Prompt Protection on Kubernetes
 ## NixOS on OrbStack (hybrid Metal)
 
 **A standalone, executable, test-driven implementation guide — the whole lab is an nbdev notebook.**
 
-- **Pure OSS end to end:** Gateway API + NGINX Gateway Fabric at the edge, NOVA rule engine, Laya open-weights decision model, and a real (deliberately vulnerable) AI application behind them. Every component is open source and self-hosted.
+- **Pure FOSS end to end:** Gateway API + NGINX Gateway Fabric at the edge, NOVA rule engine, Laya open-weights decision model, and a real (deliberately vulnerable) AI application behind them. Every component is open source and self-hosted.
 - **Declarative toolchain, one path:** Nix flakes pin every binary (`nix develop` → identical environment on any machine). On NixOS the OS is the package manager; the flake is the only toolchain path.
 - **Notebook-first:** code, tests, prompts, and prose live in one nbdev notebook. Tests run with `nbdev_test`; docs export to a shareable web page with `nbdev_docs`.
 
@@ -18,15 +18,15 @@ curl → NGINX Gateway Fabric (HTTPRoute, :80) → nova-gate pod (NOVA rules + L
                                                                     ↘ block → 403, the app never sees it
 ```
 
-![Figure M1 — The big picture: everything on one Mac, everything OSS.](assets/mmd/big-picture.svg)
+![Figure M1 — The big picture: everything on one Mac, everything FOSS.](assets/mmd/big-picture.svg)
 
 *Figure M1 — The big picture. Edge, policy gate, and the vulnerable app — all open source, all on one MacBook.*
 
 | Layer | Choice | Why |
 |---|---|---|
 | Platform | NixOS VM on OrbStack (single-node k3s) + native macOS Ollama | NixOS declares the whole lab machine; Ollama stays native for Metal GPU speed — the one hybrid seam, justified in §1.1 |
-| IaC | OpenTofu (`kubernetes` provider) | Declarative from command one; `tofu` is the OSS MPL fork of Terraform |
-| Edge | NGINX Gateway Fabric (Gateway API v1, OSS, F5-owned) | F5's own open-source Gateway API implementation — production-grade edge with a clean upgrade path to commercial gateways later |
+| IaC | OpenTofu (`kubernetes` provider) | Declarative from command one; `tofu` is the FOSS MPL fork of Terraform |
+| Edge | NGINX Gateway Fabric (Gateway API v1, FOSS, F5-owned) | F5's own open-source Gateway API implementation — production-grade edge with a clean upgrade path to commercial gateways later |
 | Policy | NOVA framework (`.nov` rules) | YARA-for-prompts: keyword → semantic → LLM evaluators, rules as auditable text in Git |
 | Decision | Laya (open weights, Apache-2.0) | 421M-param classifier: injection / jailbreak / benign in one forward pass; runs on M4 CPU |
 | Target | **Atlas** — deliberately vulnerable support assistant | A *real* app (real LLM chat + tool calls via the Metal seam) whose leaks are provable — a simulator cannot be coaxed, so it can only screen |
@@ -97,7 +97,7 @@ participant devShell:
 
 ```nix
 {
-  description = "AI Security using OSS tools with Macbook Pro — Laya + NOVA on NixOS (OrbStack), hybrid Metal";
+  description = "AI Security using FOSS tools with Macbook Pro — Laya + NOVA on NixOS (OrbStack), hybrid Metal";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -179,7 +179,7 @@ ai-sec-lab/
 [DEFAULT]
 lib_name = ai_sec_lab
 user = ai-sec-lab
-description = AI security using OSS tools with Macbook Pro: Laya + NOVA behind a Gateway API edge (NixOS edition)
+description = AI security using FOSS tools with Macbook Pro: Laya + NOVA behind a Gateway API edge (NixOS edition)
 keywords = kubernetes, llm, guardrails, gateway-api, nova, laya, nixos
 tst_flags = slow
 nbs_path = notebooks
@@ -723,7 +723,7 @@ resource "kubernetes_service" "atlas" {
 
 # Gateway API CRDs (if the cluster lacks them):
 #   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
-# Edge: NGINX Gateway Fabric (OSS, F5) — arm64 images, containerd runtime (no docker daemon needed):
+# Edge: NGINX Gateway Fabric (FOSS, F5) — arm64 images, containerd runtime (no docker daemon needed):
 #   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
 #   kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v2.0.0/deploy/crds.yaml
 #   kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v2.0.0/deploy/default/deploy.yaml

@@ -1,4 +1,4 @@
-# AI Security using OSS tools with Macbook Pro
+# AI Security using FOSS tools with Macbook Pro
 
 [![License](https://img.shields.io/github/license/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/blob/main/LICENSE)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/graphs/commit-activity)
@@ -59,7 +59,7 @@ the gate stopping it.
 
 ![big picture](assets/mmd/big-picture.svg)
 
-*Figure M1 — Edge, policy gate, and the vulnerable app. Everything OSS, everything on one Mac.*
+*Figure M1 — Edge, policy gate, and the vulnerable app. Everything FOSS, everything on one Mac.*
 
 ## The components
 
