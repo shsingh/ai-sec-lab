@@ -9,6 +9,7 @@
 [![ci](https://github.com/shsingh/ai-sec-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/ci.yml)
 [![dep-contract](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml)
 [![Dependency Review](https://github.com/shsingh/ai-sec-lab/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dependency-review.yml)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot&logoColor=white)](https://github.com/shsingh/ai-sec-lab/blob/main/renovate.json)
 
 A single-node AI prompt-security lab you can run on one Apple-Silicon
 MacBook: a real Kubernetes edge, a real policy gate, a real LLM
