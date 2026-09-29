@@ -1,5 +1,5 @@
 {
-  description = "AI-Sec Inbound Lab — Laya + NOVA on NixOS (OrbStack), hybrid Metal";
+  description = "AI Security using OSS tools with Macbook Pro — Laya + NOVA on NixOS (OrbStack), hybrid Metal";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

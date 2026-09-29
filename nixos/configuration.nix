@@ -1,4 +1,4 @@
-# AI-Sec Inbound Lab — the NixOS lab machine, declared.
+# AI Security using OSS tools with Macbook Pro — the NixOS lab machine, declared.
 # One `nixos-rebuild switch --flake .#aisec-lab` stands up:
 #   k3s (single node) + docker + the lab toolchain + shell env.
 # No shell scripts: everything here is declarative.

@@ -1,4 +1,4 @@
-# AI-Sec Inbound Lab
+# AI Security using OSS tools with Macbook Pro
 
 [![License](https://img.shields.io/github/license/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/blob/main/LICENSE)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/graphs/commit-activity)
