@@ -24,6 +24,30 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Start mock Ollama (CI has no Metal seam; /api/tags must answer or Nova init fails)
+        run: |
+          cat > mock_ollama.py <<'EOF'
+          import http.server, json
+
+          class Handler(http.server.BaseHTTPRequestHandler):
+              def do_GET(self):
+                  if self.path == "/api/tags":
+                      body = json.dumps({"models": [{"name": "llama3.2:3b"}]}).encode()
+                      self.send_response(200)
+                      self.end_headers()
+                      self.wfile.write(body)
+                  else:
+                      self.send_error(404)
+
+              def log_message(self, *args):
+                  pass
+
+          http.server.HTTPServer(("127.0.0.1", 11434), Handler).serve_forever()
+          EOF
+          nohup python mock_ollama.py &
+          sleep 1
+          curl -sf http://127.0.0.1:11434/api/tags >/dev/null && echo "mock ollama ready"
+
       - name: Set up python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
