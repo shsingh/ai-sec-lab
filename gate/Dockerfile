@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 # [semantic] extra = sentence-transformers + the MiniLM model used by NOVA's semantics tier
 RUN pip install --no-cache-dir "laya[serve]" "nova-hunting[semantic]" fastapi uvicorn httpx
