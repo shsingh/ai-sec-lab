@@ -1,7 +1,10 @@
 terraform {
   required_version = ">= 1.7"
   required_providers {
-    kubernetes = { source = "hashicorp/kubernetes", version = "~> 2.31" }
+    kubernetes = {
+    source  = "hashicorp/kubernetes"
+    version = "~> 2.31"
+  }
   }
 }
 provider "kubernetes" { config_path = "~/.kube/config" }
@@ -11,7 +14,10 @@ resource "kubernetes_namespace" "lab" {
 }
 
 resource "kubernetes_config_map" "nova_rules" {
-  metadata { name = "nova-rules"; namespace = kubernetes_namespace.lab.metadata[0].name }
+  metadata {
+    name      = "nova-rules"
+    namespace = kubernetes_namespace.lab.metadata[0].name
+  }
   data = {
     "jailbreak.nov"    = file("../nova-rules/jailbreak.nov")
     "injection.nov"    = file("../nova-rules/injection.nov")
@@ -23,7 +29,10 @@ resource "kubernetes_config_map" "nova_rules" {
 # The gate: NOVA rules + Laya decision model. Every request from the edge
 # hits this first; it forwards only clean prompts to the victim app.
 resource "kubernetes_deployment" "nova_gate" {
-  metadata { name = "nova-gate"; namespace = kubernetes_namespace.lab.metadata[0].name }
+  metadata {
+    name      = "nova-gate"
+    namespace = kubernetes_namespace.lab.metadata[0].name
+  }
   spec {
     replicas = 1
     selector { match_labels = { app = "nova-gate" } }
@@ -35,7 +44,8 @@ resource "kubernetes_deployment" "nova_gate" {
           image = "ai-sec-lab/laya-gate:1.0.0"
           port { container_port = 8000 }
           env {
-            name  = "NOVA_RULES_DIR"; value = "/rules"
+            name  = "NOVA_RULES_DIR"
+            value = "/rules"
           }
           env {
             name  = "SIM_UPSTREAM"
@@ -53,9 +63,16 @@ resource "kubernetes_deployment" "nova_gate" {
             requests = { cpu = "1", memory = "2Gi" }
             limits   = { cpu = "3", memory = "5Gi" }
           }
-          volume_mount { name = "rules"; mount_path = "/rules"; read_only = true }
+          volume_mount {
+            name       = "rules"
+            mount_path = "/rules"
+            read_only  = true
+          }
           readiness_probe {
-            http_get { path = "/health"; port = 8000 }
+            http_get {
+              path = "/health"
+              port = 8000
+            }
             initial_delay_seconds = 30
           }
         }
@@ -69,10 +86,16 @@ resource "kubernetes_deployment" "nova_gate" {
 }
 
 resource "kubernetes_service" "nova" {
-  metadata { name = "nova-gate"; namespace = kubernetes_namespace.lab.metadata[0].name }
+  metadata {
+    name      = "nova-gate"
+    namespace = kubernetes_namespace.lab.metadata[0].name
+  }
   spec {
     selector = { app = "nova-gate" }
-    port { port = 8000; target_port = 8000 }
+    port {
+      port        = 8000
+      target_port = 8000
+    }
   }
 }
 
@@ -82,7 +105,10 @@ resource "kubernetes_service" "nova" {
 #   * direct path — atlas:8080 inside the cluster (unprotected), used by
 #     05_attacks.ipynb to prove the leak is real before the gate blocks it.
 resource "kubernetes_deployment" "atlas" {
-  metadata { name = "atlas"; namespace = kubernetes_namespace.lab.metadata[0].name }
+  metadata {
+    name      = "atlas"
+    namespace = kubernetes_namespace.lab.metadata[0].name
+  }
   spec {
     replicas = 1
     selector { match_labels = { app = "atlas" } }
@@ -106,7 +132,10 @@ resource "kubernetes_deployment" "atlas" {
             limits   = { cpu = "2", memory = "3Gi" }
           }
           readiness_probe {
-            http_get { path = "/health"; port = 8080 }
+            http_get {
+              path = "/health"
+              port = 8080
+            }
             initial_delay_seconds = 10
           }
         }
@@ -116,10 +145,16 @@ resource "kubernetes_deployment" "atlas" {
 }
 
 resource "kubernetes_service" "atlas" {
-  metadata { name = "atlas"; namespace = kubernetes_namespace.lab.metadata[0].name }
+  metadata {
+    name      = "atlas"
+    namespace = kubernetes_namespace.lab.metadata[0].name
+  }
   spec {
     selector = { app = "atlas" }
-    port { port = 8080; target_port = 8080 }
+    port {
+      port        = 8080
+      target_port = 8080
+    }
   }
 }
 
@@ -146,11 +181,16 @@ resource "kubernetes_manifest" "gateway" {
   manifest = {
     apiVersion = "gateway.networking.k8s.io/v1"
     kind       = "Gateway"
-    metadata = { name = "ai-sec-edge"; namespace = kubernetes_namespace.lab.metadata[0].name }
+    metadata = {
+      name      = "ai-sec-edge"
+      namespace = kubernetes_namespace.lab.metadata[0].name
+    }
     spec = {
       gatewayClassName = "nginx"
       listeners = [{
-        name = "http"; protocol = "HTTP"; port = 80
+        name         = "http"
+        protocol     = "HTTP"
+        port         = 80
         allowedRoutes = { namespaces = { from = "Same" } }
       }]
     }
@@ -161,7 +201,10 @@ resource "kubernetes_manifest" "route" {
   manifest = {
     apiVersion = "gateway.networking.k8s.io/v1"
     kind       = "HTTPRoute"
-    metadata = { name = "ai-sec-inbound"; namespace = kubernetes_namespace.lab.metadata[0].name }
+    metadata = {
+      name      = "ai-sec-inbound"
+      namespace = kubernetes_namespace.lab.metadata[0].name
+    }
     spec = {
       parentRefs = [{ name = "ai-sec-edge" }]
       hostnames  = ["ai-sec.lab.internal"]
