@@ -1,10 +1,10 @@
-%% M1 — big-picture: the whole lab on one Mac, everything OSS
+%% M1 — big-picture: the whole lab on one Mac, everything FOSS
 %% render: flowchart, left→right
 flowchart LR
     subgraph HOST["MacBook Pro — OrbStack"]
         direction LR
         subgraph K8S["Single-node Kubernetes (NixOS VM)"]
-            NGF["NGINX Gateway Fabric<br/>(Gateway API, OSS, F5)"]
+            NGF["NGINX Gateway Fabric<br/>(Gateway API, FOSS, F5)"]
             GATE["nova-gate pod<br/>NOVA rules + Laya<br/>421M decision model"]
             VICTIM["atlas — vulnerable<br/>support assistant<br/>(real LLM, tool calls)"]
         end
