@@ -91,6 +91,13 @@ port 80 a legal NodePort for the NGINX Gateway Fabric service.
 kubectl version --client && tofu version && python -c "import laya, nova; print('laya + nova importable')"
 ```
 
+## Performance
+
+Ollama residency, context, and keep-alive tuning for the two host models is
+measured and documented in [PERFORMANCE.md](PERFORMANCE.md). The default
+posture (no tuning) suits the reference machine; smaller hosts pin
+context per use case.
+
 ## Where the notebook runs
 
 Start Jupyter **inside the VM** (it must run where `kubectl`/`tofu` and

@@ -1287,6 +1287,33 @@ prompts, test results) into a static website;
 [notebooks/index.ipynb](../notebooks/index.ipynb) is its linked contents
 page.
 
+## Performance tuning
+
+Resource tuning is measured and documented in [PERFORMANCE.md](../PERFORMANCE.md)
+(M4 Max / 128 GB reference machine, Ollama 0.34.4). The summary, with
+what is tenable and why:
+
+- **Two models co-resident by default** — `OLLAMA_MAX_LOADED_MODELS`
+  defaults to 3; judge and victim load together (measured 100% GPU,
+  70% host memory free). No tuning needed on ≥64 GB machines.
+- **Context length, not concurrency, dominates residency** — the host's
+  VRAM-scaled defaults (131k/262k) make the 3B judge hold ~15 GB of KV
+  cache against ~2 GB of weights (18 GB vs 3.1 GB resident at 8192,
+  measured). The lab's prompts are hundreds of tokens; pin
+  `options.num_ctx = 8192` on the judge or a `PARAMETER num_ctx` Modelfile
+  variant when host memory is shared.
+- **Keep-alive:** default 5 min; raise to 30 min while working through
+  notebooks (a reload costs ~1 s measured, so the default is tolerable).
+- **Flash attention / KV-cache quantization do not apply here** — the
+  llama family falls back to f16 unless the architecture is auto-enabled,
+  and the victim runs on the MLX engine where these flags have no effect.
+- **Metal wired-limit (`iogpu.wired_limit_mb`)** stays at the system
+  default — 26 GB worst-case residency on 128 GB does not approach it.
+- **Pod resources:** gate 1 CPU/2Gi → 3 CPU/5Gi, victim 0.5 CPU/1Gi →
+  2 CPU/3 Gi as declared in `main.tf`; keep the 2 Gi request (Laya's boot
+  spikes past it). Cap the VM explicitly with `orb config aisec-lab -m 16`
+  on hosts smaller than the reference machine.
+
 ## Tear-down / re-run
 
 ```bash
