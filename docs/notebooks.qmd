@@ -11,11 +11,13 @@ and fails when it is in place.
 
 ## How to use this index
 
-This page is the table of contents for the lab. Open a notebook from the table,
-read the description above each cell, run top to bottom, and continue
-with the notebook named in the run-order table. No jumping between directories:
-install once ([Installation](installation.qmd)), open this page, read, click.
-
+This page is the table of contents for the lab. Open a notebook from the
+table — start with
+[00_core.ipynb](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/00_core.ipynb)
+— read the description above each cell, run top to bottom, and continue
+with the notebook named at the end of each. No jumping between
+directories: install once ([Installation](installation.qmd)), open this
+page, read, click.
 
 ## What the lab proves, in run order
 

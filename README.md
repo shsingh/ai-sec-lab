@@ -1,4 +1,4 @@
-# AI Security Lab on a MacBook — FOSS prompt protection, proven by real attacks
+# AI Security using FOSS tools for prompt protection
 
 [![License](https://img.shields.io/github/license/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/blob/main/LICENSE)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/graphs/commit-activity)

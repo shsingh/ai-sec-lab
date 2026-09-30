@@ -1,5 +1,5 @@
 ---
-title: "AI Security Lab — FOSS prompt protection, proven by real attacks"
+title: "AI Security using FOSS tools for prompt protection"
 image: assets/mmd/big-picture.svg
 ---
 
