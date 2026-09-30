@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths:
+      - '_quarto.yml'
       - 'docs/**'
       - 'README.md'
       - 'INSTALL.md'

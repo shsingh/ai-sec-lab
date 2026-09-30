@@ -72,6 +72,8 @@ format:
   html:
     theme: cosmo
     css: docs/styles.css
+    grid:
+      body-width: 1100px   # default 800px squeezed the homepage table + badge row onto wraps
     toc: true
     toc-title: "Page Contents"
     toc-depth: 3
