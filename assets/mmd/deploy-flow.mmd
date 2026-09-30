@@ -1,4 +1,4 @@
-%% M6 — deploy-flow: what tofu creates, in order
+%% Figure 07 — deploy-flow: what tofu creates, in order
 flowchart TB
     TF["tofu apply"] --> NS["namespace ai-sec"]
     NS --> CM["ConfigMap nova-rules<br/>(.nov files)"]
@@ -13,3 +13,5 @@ flowchart TB
 
     classDef k8s fill:#e8eef7,stroke:#5b7db1
     class NS,CM,DG,DS,SG,SS,GW,HR,LB k8s
+    classDef plain fill:#e8eef7,stroke:#5b7db1,color:#333
+    class TF plain

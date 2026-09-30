@@ -1,0 +1,111 @@
+# Usage
+
+Day-to-day operation of the lab assumes [INSTALL.md](INSTALL.md) is
+done: the `aisec-lab` NixOS machine converged, `nix develop` active, and
+Jupyter serving on Mac `localhost:8888`. Two ways to drive it —
+non-interactive and interactive — plus free-play operation after the
+scripted tests pass.
+
+## Non-interactive: `nbdev_test`, the acceptance suite
+
+From a VM shell inside the repository:
+
+```bash
+nix develop
+nbdev_test --n_workers 0    # serial on purpose — one shared cluster
+```
+
+`nbdev_test` exits 0 only when, in notebook order:
+
+1. cluster reachable — one Ready node, `aisec-lab`;
+2. all four `.nov` rule files parse, and each evaluator tier (keywords →
+   semantics → LLM judge) catches its target while a benign prompt passes;
+3. the gate's policy configuration catches the same tiers in a live NOVA
+   engine;
+4. the victim's traps assert armed: canary key, poisoned support note,
+   CRM sink;
+5. OpenTofu validates the generated configuration;
+6. workloads pass their rollouts and the edge answers its first probe;
+7. benign prompts return 200 with real model answers (transparency);
+8. every attack category returns 403 at the edge and the CRM log gains
+   nothing new (the gate holds);
+9. the gate's audit log attributes every block (`engine` + tier/label)
+   and every pass.
+
+Two cells are `# slow`-flagged and therefore skipped by `nbdev_test`:
+the `tofu apply` (04_deploy) and the direct-path leak proof (05_attacks,
+a real LLM turn + tool loop). Run those cells interactively on first
+setup — click through [04_deploy](notebooks/04_deploy.ipynb) and
+[05_attacks](notebooks/05_attacks.ipynb) in order — then `nbdev_test`
+re-verifies everything else against the standing lab. The free-play
+scratchpad is `#| notest` and never part of the suite.
+
+## Interactive: click through the notebooks
+
+Open [notebooks/index.ipynb](notebooks/index.ipynb) first — it carries a
+linked contents table for the whole lab — then follow its table in
+order. Every cell's narration states what the cell does, what it
+asserts, and what its output should look like; each notebook ends by
+naming the next one.
+
+| Run order | Notebook | Covers |
+|---|---|---|
+| 1 | [00_core](notebooks/00_core.ipynb) | shared constants + the fail-closed shell helper + cluster front-door test |
+| 2 | [01_nova_rules](notebooks/01_nova_rules.ipynb) | the four `.nov` rule files, one per evaluator tier, live-scan tested |
+| 3 | [02_gate_app](notebooks/02_gate_app.ipynb) | the FastAPI gate (NOVA + Laya) and its container image |
+| 4 | [03_victim](notebooks/03_victim.ipynb) | Atlas — the vulnerable support app and its three weaknesses |
+| 5 | [04_deploy](notebooks/04_deploy.ipynb) | OpenTofu: validate → apply → rollouts → first edge probe |
+| 6 | [05_attacks](notebooks/05_attacks.ipynb) | the two-path proof: real leak (direct path), real block (edge path) |
+
+## Free play: operate the gate, don't just test it
+
+The scripted attacks are the floor, not the ceiling. The deployment is
+built for ad-hoc iteration with zero image rebuilds:
+
+- The rules are a **mounted ConfigMap** — edit the live policy and
+  converge the gate in seconds:
+
+  ```
+  kubectl edit configmap nova-rules -n ai-sec
+  kubectl rollout restart deploy/nova-gate -n ai-sec
+  kubectl rollout status deploy/nova-gate -n ai-sec --timeout=180s
+  ```
+
+- Every 403 body names the **engine and tier** that fired
+  (`{"engine":"nova","tier":…}` or `{"engine":"laya","label":…}`) — the
+  feedback signal for which rule caught it, or what slipped through.
+- Prompts that pass reach the **real engine with its tool loop** —
+  multi-turn coaxing works interactively through `try_prompt` in
+  [05_attacks](notebooks/05_attacks.ipynb)' `#| notest` scratchpad.
+- The **CRM sink** (`crm_log()`) reports whether anything leaked.
+
+The operating loop a run should follow: attack → read the verdict
+metadata → tighten the matching `.nov` rule or the Laya threshold →
+converge the gate → re-fire until 403 → then commit the learned rule to
+[`nova-rules/`](nova-rules/) so the scripted tests carry it for every
+future run. Findings promoted from scratch cell to tested rule are the
+lab's contribution model.
+
+## Publish the documentation site
+
+```bash
+nbdev_docs    # renders all seven notebooks (code, prose, tests) as a browsable site
+```
+
+The published site is the shareable form of the lab — code, prompts,
+test narrative, and diagrams in one readable artefact.
+
+## Tear-down / re-run
+
+```bash
+cd terraform && tofu destroy -auto-approve   # removes everything it created
+docker rmi ai-sec-lab/laya-gate:1.0.0 ai-sec-lab/atlas-victim:1.0.0
+nix store gc                                 # reclaim the Nix store
+
+# full teardown of the lab machine itself (from the Mac):
+#   orb delete aisec-lab                     # the VM is disposable; the flake rebuilds it
+```
+
+Subsequent runs re-apply cheaply: `tofu apply` is a no-op when state
+matches, and `nbdev_test` re-verifies every acceptance criterion in
+order.

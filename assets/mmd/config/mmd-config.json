@@ -1,0 +1,21 @@
+{
+ "theme": "default",
+ "themeVariables": {
+  "clusterBkg": "transparent",
+  "clusterBorder": "#aaaa33",
+  "primaryColor": "#e8eef7",
+  "primaryTextColor": "#333",
+  "primaryBorderColor": "#5b7db1",
+  "lineColor": "#333333",
+  "secondaryColor": "#e8eef7",
+  "tertiaryColor": "transparent",
+  "actorBkg": "#e8eef7",
+  "actorBorder": "#5b7db1",
+  "signalColor": "#333",
+  "sequenceNumberColor": "#fff"
+ },
+ "flowchart": {
+  "curve": "basis"
+ },
+ "themeCSS": ".cluster rect { fill: transparent !important; stroke: #aaaa33 !important; } .actor { fill: #e8eef7 !important; stroke: #5b7db1 !important; } .actor-top { fill: #e8eef7 !important; stroke: #5b7db1 !important; } .actor-bottom { fill: #e8eef7 !important; stroke: #5b7db1 !important; } rect.actor { fill: #e8eef7 !important; stroke: #5b7db1 !important; } .edgeLabel rect { background-color: transparent !important; fill: transparent !important; opacity: 1 !important; } .edgeLabel { background-color: transparent !important; } .edgeLabel p { background-color: transparent !important; } .labelBkg { background-color: transparent !important; } .labelBkg rect { fill: transparent !important; opacity: 1 !important; }  .node path, .node rect, .node polygon, .node ellipse, .node circle { fill: #e8eef7 !important; stroke: #5b7db1 !important; } "
+}
