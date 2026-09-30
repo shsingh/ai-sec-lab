@@ -1,4 +1,6 @@
-# Security Policy
+---
+title: "Security"
+---
 
 ## Reporting a vulnerability
 
@@ -182,9 +184,9 @@ kis=
 
 - OpenSSF Scorecard — ongoing checks of repo security posture, score published on the badge ([results](https://api.securityscorecards.dev/projects/github.com/shsingh/ai-sec-lab)).
 - OpenSSF Best Practices — project [15100](https://www.bestpractices.dev/projects/15100): criteria for releases, change control and security.
-- Dependency Review — every PR is checked for license and vulnerability differences versus its base ([.github/workflows/dependency-review.yml](.github/workflows/dependency-review.yml)).
+- Dependency Review — every PR is checked for license and vulnerability differences versus its base ([workflow](https://github.com/shsingh/ai-sec-lab/blob/main/.github/workflows/dependency-review.yml)).
 - Dependabot — dependency manifests kept current; security updates and alerts enabled ([alerts](https://github.com/shsingh/ai-sec-lab/security/dependabot)).
-- `dep-contract` CI — the toolchain and rule contract is validated on every change ([.github/workflows/dep-contract.yml](.github/workflows/dep-contract.yml)).
+- `dep-contract` CI — the toolchain and rule contract is validated on every change ([workflow](https://github.com/shsingh/ai-sec-lab/blob/main/.github/workflows/dep-contract.yml)).
 
 **Secret hygiene**
 
@@ -193,7 +195,7 @@ kis=
 
 **Reproducibility controls**
 
-- pre-commit.ci runs the hook set on every PR — formatting, YAML/JSON/TOML validity, large-file and case-conflict guards, secret detection ([.pre-commit-config.yaml](.pre-commit-config.yaml)).
+- pre-commit.ci runs the hook set on every PR — formatting, YAML/JSON/TOML validity, large-file and case-conflict guards, secret detection ([config](https://github.com/shsingh/ai-sec-lab/blob/main/.pre-commit-config.yaml)).
 - The lab builds from a pinned Nix flake (`flake.lock`) — the same commit everywhere.
 - Content-based dependency isolation: the cluster pulls only images and modules referenced by reviewed manifests.
 
