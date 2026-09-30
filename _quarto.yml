@@ -22,17 +22,17 @@ website:
     background: dark
     pinned: true
     left:
-      - href: index.qmd
+      - href: docs/index.qmd
         text: Home
-      - href: installation.qmd
+      - href: docs/installation.qmd
         text: Install
-      - href: usage.qmd
+      - href: docs/usage.qmd
         text: Usage
-      - href: guide/index.qmd
+      - href: docs/guide/index.qmd
         text: Guide
-      - href: performance.qmd
+      - href: docs/performance.qmd
         text: Performance
-      - href: notebooks.qmd
+      - href: docs/notebooks.qmd
         text: Notebooks
     right:
       - icon: github
@@ -43,10 +43,10 @@ website:
       style: floating
       align: left
       contents:
-        - guide/index.qmd
-        - guide/what.qmd
-        - guide/why.qmd
-        - guide/how.qmd
+        - docs/guide/index.qmd
+        - docs/guide/what.qmd
+        - docs/guide/why.qmd
+        - docs/guide/how.qmd
 
   page-footer:
     left: "ai-sec-lab — FOSS prompt-security lab"
@@ -57,7 +57,7 @@ website:
 format:
   html:
     theme: cosmo
-    css: styles.css
+    css: docs/styles.css
     toc: true
     toc-title: "Page Contents"
     toc-depth: 3
