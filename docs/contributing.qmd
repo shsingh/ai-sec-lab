@@ -1,0 +1,126 @@
+---
+title: "Contributing"
+---
+
+Contributions are welcome. This document defines the working agreement: how
+changes are proposed, reviewed, and merged, and what the continuous-integration
+gates enforce.
+
+## Ground rules
+
+1. **Never commit to `main`.** All work happens on a branch, one change per
+   branch, merged via pull request. Branch names follow
+   `<type>/<short-description>` with kebab-case — e.g. `fix/victim-svc-url`,
+   `feat/canary-attacker`, `docs/install-guide`.
+2. **Conventional Commits.** Every commit message follows
+   the [specification](https://www.conventionalcommits.org/en/v1.0.0):
+   `type(scope): subject`.
+   - Types: `feat`, `fix`, `docs`, `refactor`, `test`, `build`, `ci`, `chore`.
+   - `scope` is the component: a notebook slug (`00_core`, `05_attacks`),
+     a directory (`gate`, `nova-rules`, `terraform`), or a surface (`site`,
+     `readme`).
+   - Subject: imperative, lowercase, no trailing period. Body (optional):
+     what changed and why; wrap at 72 columns.
+3. **Sign your commits.** Commits must be GPG-signed or SSH-signed
+   (`git config --global commit.gpgsign true`). Unsigned commits are not
+   merged. Verify locally with `git log --show-signature`.
+4. **One logical change per PR.** Small, reviewable diffs merge faster.
+   Drive-by formatting belongs in its own commit if it is part of the same PR.
+
+## Security-sensitive changes
+
+Anything touching the gate, the rules, or the attack corpus warrants extra
+care:
+
+- **Vulnerabilities are not issues.** Follow [SECURITY.md](security.html) —
+  email the contact with the OpenPGP key provided, or use GitHub's private
+  vulnerability reporting. Never open a public issue for an unreported
+  vulnerability.
+- **Canary fixtures may not fire accidentally.** The victim application's
+  canary key, poisoned support note, and CRM sink are deliberate traps;
+  do not weaken or remove their assertions.
+- **Rules changes** must state the evaluator tier (keywords, semantics,
+  LLM judge) affected and include a positive and negative sample.
+
+## The acceptance suite
+
+The repository's contract is enforced by notebooks, not unit tests:
+
+```
+nix develop -c nbdev_test --n_workers 0
+```
+
+`nbdev_test` exits 0 only when, in notebook order, the cluster is reachable,
+all four `.nov` rule files parse, the gate policy loads, the victim traps
+behave, the OpenTofu apply converges, and the gated path blocks the corpus.
+Run it before every push. A PR whose cells fail is not reviewed.
+
+CI additionally runs on every PR:
+
+| Check | What it does |
+|---|---|
+| `ci` | rule-engine + gate contract tests, notebook sync |
+| `dep-contract` | toolchain and dependency contract verification |
+| `dependency-review` | license + vulnerability diff vs the base branch |
+| `pre-commit.ci` | formatting, YAML/JSON/TOML validity, end-of-file, trailing whitespace, case conflicts, large files, gitleaks |
+| Security features | secret scanning + push protection, Dependabot, private vulnerability reporting (see [SECURITY.md](security.html)) |
+
+`pre-commit run --all-files` reproduces the hook set locally. The
+end-of-file-fixer requires exactly one final newline — commit what the hook
+fixed.
+
+## What we merge eagerly
+
+- Bug fixes with a reproducing case.
+- Rule improvements with positive/negative samples.
+- Notebook narration or guide corrections where wording drifted from code.
+- Dependency bumps that keep the flake lock consistent.
+
+## What needs discussion first
+
+Open an issue before a PR for: new dependency additions to the flake,
+changes to the deployment topology (Gateway API shape, namespaces), new
+model dependencies, and anything that changes the acceptance contract
+above. Non-trivial proposals should explain the problem, the intended
+behavior, and how it will be tested.
+
+## A model pull request
+
+**Branch:** `fix/rule-escape-on-encoded-payloads`
+
+**Commit:**
+
+```
+fix(nova-rules): match percent-encoded payloads in keywords tier
+
+The keywords evaluator decoded URI escapes only after segmentation, so
+%2F%3A-escaped canary prefixes passed the first tier. Decoding is now the
+first pass, before keyword matching; a round-trip test covers three
+encodings from the attack corpus.
+```
+
+**Description:**
+
+```
+## Problem
+The keywords tier misses percent-encoded canary prefixes; the probe in
+02_gate_app (cell 9) shows a 200 on the gated edge for payload set 3.
+
+## Change
+Rules evaluation now URL-decodes before segmentation (gate/rules.py:41).
+Positive and negative samples added to nova-rules/samples/.
+
+## Verification
+- `nbdev_test --n_workers 0` — 6/6 notebooks green
+- New round-trip test passes on the corpus encodings
+```
+
+**PR title** mirrors the commit subject. The description states the problem,
+the change, and the evidence — a reader should be able to judge the diff
+without running the lab.
+
+## Reviewing
+
+Reviews verify the acceptance contract, fixture integrity, and commit
+hygiene. Small PRs with green checks are usually merged within days;
+changes that need discussion get an issue first.

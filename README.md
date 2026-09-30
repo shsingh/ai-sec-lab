@@ -30,6 +30,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[Guide](https://shsingh.github.io/ai-sec-lab/guide/)** | full reference: architecture, rationale, per-step walkthrough (site; sources in docs/guide/) |
 | ▸ | **[PERFORMANCE.md](PERFORMANCE.md)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 | ▸ | **[SECURITY.md](SECURITY.md)** | vulnerability reporting (email + OpenPGP key, GitHub private reporting), security hygiene: Scorecard, Best Practices, Dependency Review, Dependabot, gitleaks, push protection |
+| ▸ | **[CONTRIBUTING.md](CONTRIBUTING.md)** | how to contribute: branch + commit conventions, signing, acceptance suite, a worked example PR |
 
 ## Test results
 
