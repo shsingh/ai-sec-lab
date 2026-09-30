@@ -24,6 +24,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[USAGE.md](USAGE.md)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
 | ▸ | **[notebooks/index.ipynb](notebooks/index.ipynb)** | the notebooks' linked table of contents |
 | ▸ | **[docs/ai-sec-implementation.md](docs/ai-sec-implementation.md)** | full reference: architecture, rationale, per-cell walkthrough |
+| ▸ | **[PERFORMANCE.md](PERFORMANCE.md)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 
 ## Test results
 
