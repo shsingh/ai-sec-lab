@@ -6,21 +6,33 @@ website:
   title: "AI Security Lab"
   description: "A single-node AI prompt-security lab on one Apple-Silicon MacBook — Kubernetes edge, NOVA + Laya policy gate, and a two-path attack proof."
   page-navigation: true
+  site-url: https://shsingh.github.io/ai-sec-lab/
+  repo-url: https://github.com/shsingh/ai-sec-lab
+  repo-subdir: docs
+  repo-branch: main
+  repo-actions: [edit, issue]
+  issue-url: https://github.com/shsingh/ai-sec-lab/issues/new
+  open-graph: true
+  twitter-card: true
+  search:
+    location: navbar
+    type: overlay
+    limit: 50
   navbar:
     background: dark
     pinned: true
     left:
-      - href: index.qmd
+      - href: docs/index.qmd
         text: Home
-      - href: installation.qmd
+      - href: docs/installation.qmd
         text: Install
-      - href: usage.qmd
+      - href: docs/usage.qmd
         text: Usage
-      - href: guide/index.qmd
+      - href: docs/guide/index.qmd
         text: Guide
-      - href: performance.qmd
+      - href: docs/performance.qmd
         text: Performance
-      - href: notebooks.qmd
+      - href: docs/notebooks.qmd
         text: Notebooks
     right:
       - icon: github
@@ -31,10 +43,10 @@ website:
       style: floating
       align: left
       contents:
-        - guide/index.qmd
-        - guide/what.qmd
-        - guide/why.qmd
-        - guide/how.qmd
+        - docs/guide/index.qmd
+        - docs/guide/what.qmd
+        - docs/guide/why.qmd
+        - docs/guide/how.qmd
 
   page-footer:
     left: "ai-sec-lab — FOSS prompt-security lab"
@@ -45,11 +57,15 @@ website:
 format:
   html:
     theme: cosmo
-    css: styles.css
+    css: docs/styles.css
     toc: true
+    toc-title: "Page Contents"
     toc-depth: 3
+    number-sections: false
+    anchor-sections: true
     code-copy: true
     code-overflow: wrap
+    link-external-newtab: true
 
 execute:
   freeze: true   # content pages are static md/qmd — never execute code at render time
