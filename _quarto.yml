@@ -1,6 +1,31 @@
 project:
   type: website
   output-dir: _site
+  # root-level .md files and non-site directories are not site pages — keep the
+  # render input set to index.qmd + docs/** (notebooks stay nbdev-owned .ipynb files)
+  exclude:
+    - "README.md"
+    - "INSTALL.md"
+    - "USAGE.md"
+    - "PERFORMANCE.md"
+    - "SECURITY.md"
+    - "LICENSE"
+    - "CODEOWNERS"
+    - "renovate.json"
+    - "requirements-dev.txt"
+    - "settings.ini"
+    - "flake.lock"
+    - "flake.nix"
+    - "nixos/**"
+    - "gate/**"
+    - "terraform/**"
+    - "nova-rules/**"
+    - "assets/mmd/*.mmd"
+    - "notebooks/**"
+    - "ai_sec_lab/**"
+    - "scripts/**"
+    - ".github/**"
+    - "cron/**"
 
 website:
   title: "AI Security Lab"
