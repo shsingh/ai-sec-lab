@@ -1,8 +1,14 @@
-# Participant toolchain — pinned python deps (installed by the flake devShell hook;
-# this file is the authoritative list for CI and manual venvs).
+# MOVED: this file is now derived from pyproject.toml + uv.lock.
+# The dependency contract lives there (Renovate bumps it, CI tests it;
+# the nix flake materialises the exact set for shells and images).
+#
+# This stub stays only so the legacy path (pip install -r
+# requirements-dev.txt) keeps working: it installs the pinned laya and
+# lets nova-hunting/fastapi/uvicorn/httpx/nbdev float to their uv.lock-
+# current versions. See INSTALL.md for the canonical (nix develop) path.
 nbdev>=2.3
 laya[serve]==0.3.22
-nova-hunting[semantic]    # keyword+regex+LLM core; [semantic] adds MiniLM for the semantics tier
+nova-hunting[semantic]
 fastapi
 uvicorn
 httpx

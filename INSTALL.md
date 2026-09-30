@@ -49,7 +49,7 @@ declared, converged, and reproducible inside the NixOS machine.
 
 The machine is declared by [`flake.nix`](flake.nix) +
 [`nixos/configuration.nix`](nixos/configuration.nix): k3s (single node,
-traefik + servicelb off), containerd/docker for image builds, the hosts
+traefik + servicelb off; images are built by the flake, so no docker daemon), the hosts
 entry, and `KUBECONFIG` for every shell. One rebuild converges a fresh
 OrbStack machine into a working lab — no setup scripts to drift.
 
@@ -60,15 +60,16 @@ orb -m aisec-lab sudo nixos-rebuild switch --flake "/path/to/ai-sec-lab#aisec-la
 
 # then enter the pinned toolchain, inside the VM:
 orb -m aisec-lab
-nix develop        # kubectl, helm, tofu, python, jupyter — pinned by flake.lock
+nix develop        # kubectl, helm, tofu, python, jupyter — pinned by flake.lock + uv.lock
 echo $KUBECONFIG   # /etc/rancher/k3s/k3s.yaml — picked up automatically
 kubectl get nodes  # expect: one Ready node, named aisec-lab
 ```
 
-`nix develop` provisions its virtualenv on first entry (`nbdev`, `laya`,
-`nova-hunting[semantic]`, `fastapi`, `jupyter`). The same `flake.lock`
-rebuilds a byte-identical environment on any colleague's Mac or a CI
-runner.
+`nix develop` puts you in a **pre-built** environment — no pip at entry,
+no network. The venv (nbdev, laya, nova-hunting[semantic], fastapi,
+jupyter) comes from `uv.lock` via uv2nix; the tools (kubectl, helm, tofu,
+node) from `flake.lock`. Both locks rebuild byte-identically on any
+colleague's Mac, a CI runner, or inside the VM.
 
 ## Part 3 — Edge access (one line)
 

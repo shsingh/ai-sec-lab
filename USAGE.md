@@ -95,7 +95,7 @@ nbdev_docs    # renders all seven notebooks (code, prose, tests) as a static sit
 
 ```bash
 cd terraform && tofu destroy -auto-approve   # removes everything it created
-docker rmi ai-sec-lab/laya-gate:1.0.0 ai-sec-lab/atlas-victim:1.0.0
+docker rm ai-sec-lab/laya-gate:1.1.0 ai-sec-lab/atlas-victim:1.1.0   # images were loaded by Nix, not built
 nix store gc                                 # reclaim the Nix store
 
 # full teardown of the lab machine itself (from the Mac):

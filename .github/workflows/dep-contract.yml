@@ -1,7 +1,14 @@
 name: dep-contract
-# Dependency-upgrade safety net: runs the gate's runtime contract against the
-# pinned versions in requirements-dev.txt on EVERY PR — including Renovate's.
-# A bump that breaks the lab fails this workflow; roll the version back.
+# Dependency-upgrade safety net. Two surface checks on every PR
+# (including Renovate's):
+#   gate-contract - the gate's runtime contract (laya verdict matrix,
+#     nova-hunting rules + init, app import chain) runs inside the nix
+#     devShell, i.e. against the uv.lock materialisation participants get.
+#     A bump that breaks the lab fails here; roll the version back.
+#   docker-build - Nix builds BOTH container images (the required
+#     context keeps its historical name; the builder is Nix).
+# The LLM tier is NOT exercised: the Ollama seam (host.orb.internal) does
+# not exist on runners; the mock below satisfies Nova's init check.
 on:
   push:
     branches: [main]
@@ -24,6 +31,9 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
       - name: Start mock Ollama (CI has no Metal seam; /api/tags must answer or Nova init fails)
         run: |
           cat > mock_ollama.py <<'EOF'
@@ -44,34 +54,23 @@ jobs:
 
           http.server.HTTPServer(("127.0.0.1", 11434), Handler).serve_forever()
           EOF
-          nohup python mock_ollama.py &
+          nohup python3 mock_ollama.py &
           sleep 1
           curl -sf http://127.0.0.1:11434/api/tags >/dev/null && echo "mock ollama ready"
 
-      - name: Set up python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.14"
-          cache: pip
-          cache-dependency-path: requirements-dev.txt
-
-      - name: Install pinned dependency set (exactly what Renovate bumps)
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements-dev.txt
-          pip show laya nova-hunting fastapi
-
-      - name: Gate contract test (laya + nova-hunting + app import chain)
+      - name: Gate contract test (laya + nova-hunting + app import chain, from uv.lock)
         env:
           NOVA_RULES_DIR: ${{ github.workspace }}/nova-rules
         run: |
-          . .venv/bin/activate
-          python scripts/test_gate_contract.py
+          nix develop --command bash -c '
+            python -c "import laya, nova, fastapi; print(\"deps OK\")"
+            python scripts/test_gate_contract.py'
 
   docker-build:
-    # Catches base-image bumps (Renovate also PRs Dockerfile FROM lines).
+    # Required context name preserved (branch protection). The builder is
+    # Nix: streamLayeredImage closures, docker never runs. The victim image
+    # is streamed end-to-end as a smoke test (output is a docker-loadable
+    # tar; size sanity only).
     runs-on: ubuntu-26.04
     steps:
       - name: Harden Runner
@@ -84,5 +83,17 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build gate image (python base + laya/nova layer)
-        run: docker build -t ai-sec-lab/laya-gate:ci gate/
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      - name: Build gate image (pinned venv + MiniLM layer + baked rules)
+        run: nix build .#packages.x86_64-linux.gate-image -o result-gate
+
+      - name: Build victim image (pinned venv)
+        run: nix build .#packages.x86_64-linux.victim-image -o result-victim
+
+      - name: "Smoke: stream victim image as docker-loadable tar"
+        run: |
+          nix run .#victim-image > /tmp/victim.tar
+          test -s /tmp/victim.tar
+          du -h /tmp/victim.tar

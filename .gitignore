@@ -10,6 +10,8 @@ notebooks/_build/
 
 # --- nix / os ---
 result
+result-*
+.reproducible-gate
 .direnv/
 .DS_Store
 
@@ -20,8 +22,9 @@ models/
 laya_home/
 
 # --- terraform ---
+# .terraform.lock.hcl is COMMITTED: it pins provider hashes (the tofu
+# contract, verified by `nix run .#tofu -- init -lockfile` in CI).
 terraform/.terraform/
-terraform/.terraform.lock.hcl
 terraform/terraform.tfstate*
 
 # --- local toolchain records / scratch ---

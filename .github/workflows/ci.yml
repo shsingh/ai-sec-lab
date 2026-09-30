@@ -24,9 +24,10 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
 
-      - name: Nix flake check (devShells evaluate)
-        run: nix flake check 2>&1 | head -40 || true
-        continue-on-error: true   # nixosConfigurations.aisec-lab is a VM target (needs a linux runner); devShells are the portable targets
+      - name: Nix flake check (full evaluation, no builds)
+        # Evaluates every output incl. the aarch64 NixOS machine; builds
+        # nothing (image/shell builds live in dep-contract).
+        run: nix flake check --all-systems --no-build
 
       - name: Dev shell tools resolve
         run: |
@@ -36,18 +37,18 @@ jobs:
             python3 --version
             echo "toolchain OK"'
 
-      - name: Terraform (OpenTofu) validate
+      - name: OpenTofu validate (providers from the committed lock)
         run: |
           nix develop --command bash -c '
             cd terraform
-            tofu init -input=false
+            tofu init -input=false -lockfile=readonly
             tofu validate'
 
       - name: .nov rules parse (structure check)
         run: |
           nix develop --command bash -c '
             python3 - <<"EOF"
-          import pathlib, re
+          import pathlib
           rules = sorted(p.name for p in pathlib.Path("nova-rules").glob("*.nov"))
           assert rules == ["exfil-llm.nov", "full-spectrum.nov", "injection.nov", "jailbreak.nov"], rules
           for p in pathlib.Path("nova-rules").glob("*.nov"):
