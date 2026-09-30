@@ -17,7 +17,6 @@ website:
   page-navigation: true
   site-url: https://shsingh.github.io/ai-sec-lab/
   repo-url: https://github.com/shsingh/ai-sec-lab
-  repo-subdir: docs
   repo-branch: main
   repo-actions: [edit, issue]
   issue-url: https://github.com/shsingh/ai-sec-lab/issues/new
