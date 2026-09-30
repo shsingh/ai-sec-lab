@@ -1,5 +1,5 @@
 ---
-title: "What — the system and its proof"
+title: "System and proof"
 ---
 
 ## Summary

@@ -6,9 +6,9 @@ The lab reference in three pages. The pages are the repository's own
 documents, rendered by the site from sources in `docs/guide/` — no
 separate implementation document exists; these pages are the reference.
 
-- [What](what.qmd) — the system and its proof: components, request path,
+- [System and proof](what.qmd) — components, request path, the four test
   claims, planes mapping.
-- [Why](why.qmd) — design rationale for every dependency, plus known
-  limits.
-- [How](how.qmd) — the per-cell walkthrough of all six notebooks with
-  their code, plus the operating model and the three commands.
+- [Design rationale](why.qmd) — every dependency choice, the hybrid
+  constraint, and known limits.
+- [Per-cell walkthrough](how.qmd) — all six notebooks with their code,
+  plus the operating model and the three commands.
