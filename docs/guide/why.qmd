@@ -2,17 +2,54 @@
 title: "Design rationale"
 ---
 
-## Nix and NixOS
+## Nix and NixOS: everything is a declaration
 
-A security lab must reproduce identically on another machine. Nix pins the entire toolchain (kubectl, helm,
-tofu, python, node — `flake.lock`), and the NixOS module declares the
-*machine* itself: k3s (via `services.k3s`, not a GUI toggle — the
-cluster's existence is reviewable text in Git like everything else),
-docker for image builds, `KUBECONFIG`, the hosts entries. One
-`nixos-rebuild switch` converges a fresh OrbStack machine into a working
-lab; the same `flake.lock` gives any colleague or CI runner a
-byte-identical environment. No setup scripts to drift, no "works on my
-machine".
+Most toolchains are a pile of imperative steps: install a runtime, pip
+install some packages, docker build an image, tofu init some providers —
+each step fetching whatever the internet serves that day. This lab
+rejects that pattern: **every artifact is a declared, hash-pinned
+derivation**, and the tools that "build" (docker, tofu) are demoted to
+loaders and appliers. If you have never used Nix, four files carry the
+whole toolchain:
+
+| File | Declares | Updated by | Verified by |
+|---|---|---|---|
+| `flake.lock` | the *tools* — kubectl, helm, tofu, node, uv | `nix flake update` | `validate` CI |
+| `uv.lock` (+ `pyproject.toml`) | every *Python package* the lab uses | Renovate | gate-contract CI (verdict matrix + app import chain) |
+| `nix/images.nix` | the *container images* — layer graph, entrypoint, MiniLM weights pinned to a Hugging Face revision with per-file sha256 | Renovate / review | `docker-build` CI (both images build on x86_64) |
+| `terraform/.terraform.lock.hcl` | the tofu *provider set* and their hashes | review | `tofu init -lockfile=readonly` in CI |
+
+Nothing is "installed" in the classic sense. `nix develop` does not run
+pip — it materialises the venv `uv.lock` already pins, byte-identically,
+from a content-addressed store. The container images are not built by
+docker either: `nix/images.nix` constructs each image as a
+`streamLayeredImage` — layers [python venv][model cache][app config],
+docker-loadable, base-image-free — and `.#load-*` pours the finished
+stream into `docker load` or `k3s ctr images import`. Docker never
+assembles layers from a floating `FROM` line and unpinned pip layers;
+it only loads and runs what Nix already decided. The NixOS module
+(`nixos/configuration.nix`) declares the *machine* the same way: k3s
+(via `services.k3s` — the cluster's existence is reviewable text in
+Git), the toolchain, `KUBECONFIG`, the hosts entries — and no docker
+daemon, because no docker building is left to do. One
+`nixos-rebuild switch --flake .#aisec-lab` converges a fresh OrbStack
+machine into a working lab.
+
+The practical consequences, for someone who has never touched Nix:
+
+- **No "works on my machine".** Every colleague, CI runner, and the VM
+  resolve the exact same hashes for tools, packages, images, and
+  providers.
+- **Bumps are safe by construction.** Renovate PRs a lock change; CI
+  re-tests the actual contract (Laya verdicts, Nova rule scanning, the
+  FastAPI chain) against the new set before anything merges.
+- **Supply chain you can audit.** The MiniLM weights the semantics tier
+  loads are fixed to a specific HF repo revision — an upstream weight
+  swap changes nothing here, because the bytes are hash-pinned in the
+  flake.
+- **One command per plane.** `nix develop` (shell), `nix run .#load-*`
+  (images), `nixos-rebuild switch` (machine), `nix run .#tofu apply`
+  (cluster) — each realises declarative text, none runs a script.
 
 ## NGINX Gateway Fabric at the edge
 
@@ -47,7 +84,7 @@ its job:
 |---|---|---|---|
 | NOVA LLM-tier judge | `llama3.2:3b` | ~2 GB | Reads intent in ~200 ms–2 s per judgement on the Mac's GPU |
 | Atlas engine | `gemma4:12b-mlx` | ~8 GB | Behaves like a real assistant (multi-turn tool loop, instruction following); MLX build = native Metal speed |
-| NOVA semantics tier | `all-MiniLM-L6-v2` | ~90 MB | Automatic on first scan; pre-baked into the gate image at build time |
+| NOVA semantics tier | `all-MiniLM-L6-v2` | ~90 MB | Pinned to a HF revision, hash-verified, pre-baked into the gate image by the flake |
 | Laya decision model | (bundled with `laya[serve]`) | ~808 MB | Typed injection/jailbreak/benign verdict, one CPU forward pass; loads on gate-container boot |
 
 The entire defence stack is local, air-gap-capable, and costs $0/token.
@@ -108,9 +145,9 @@ MacBook; no cloud keys anywhere — no external API keys are involved at any poi
   That is why the direct-path proof exists, and why a production gate
   must also screen tool/RAG traffic: out of scope here, stated so the
   boundary is explicit.
-- Nova/Laya versions move fast — pin them in `flake.nix` /
-  `requirements-dev.txt` and bump deliberately between lab runs, never
-  mid-run.
+- Nova/Laya versions move fast — pin them in `pyproject.toml`/`uv.lock`
+  and bump deliberately between lab runs, never mid-run; a bump that
+  breaks the contract fails dep-contract CI before it can merge.
 - The VM's k3s runs with default sandboxing; the gate pod's 2–5Gi memory
   limits assume the VM gets ≥8 GB.
 
