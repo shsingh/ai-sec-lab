@@ -10,6 +10,9 @@
 [![dep-contract](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml)
 [![Dependency Review](https://github.com/shsingh/ai-sec-lab/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dependency-review.yml)
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot&logoColor=white)](https://github.com/shsingh/ai-sec-lab/blob/main/renovate.json)
+[![pages](https://github.com/shsingh/ai-sec-lab/actions/workflows/pages.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/pages.yml)
+
+Live site: https://shsingh.github.io/ai-sec-lab/
 
 A single-node AI prompt-security lab that runs on one Apple-Silicon
 MacBook: a Kubernetes Gateway API edge, a policy gate (NOVA + Laya), a
