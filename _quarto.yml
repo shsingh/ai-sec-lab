@@ -22,10 +22,10 @@ website:
     background: dark
     pinned: true
     left:
-      - href: docs/index.qmd
+      - href: index.qmd
+        text: Home
+      - href: docs/notebooks.qmd
         text: Notebooks
-      - href: docs/overview.qmd
-        text: Overview
       - href: docs/installation.qmd
         text: Install
       - href: docs/usage.qmd
