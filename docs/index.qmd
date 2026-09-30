@@ -1,8 +1,8 @@
 ---
-title: "AI Security Lab — the lab's linked table of contents"
+title: "Lab code and documentation"
 ---
 
-# AI Security Lab — a real prompt-security edge, proven by real attacks
+## The notebooks and their documentation
 
 A single-node AI prompt-security lab that runs on one Apple-Silicon
 MacBook: a real Kubernetes edge, a real policy gate, a real LLM
