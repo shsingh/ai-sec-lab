@@ -1,0 +1,48 @@
+# Participant dependency contract — the single source of truth for Python
+# deps. uv.lock pins them hash-verbatim; the nix flake (uv2nix) materialises
+# this exact set into devShells and the container images. Renovate bumps
+# pyproject.toml + uv.lock together; dep-contract CI fails a breaking bump.
+[project]
+name = "ai-sec-lab"
+version = "1.0.0"
+description = "AI Security lab — NOVA hunting + Laya gate (declarative toolchain)"
+requires-python = ">=3.14"
+dependencies = [
+    "nbdev>=2.3",
+    "laya[serve]==0.3.22",
+    "nova-hunting[semantic]",  # semantic extra = sentence-transformers + MiniLM
+    "fastapi",
+    "uvicorn",
+    "httpx",
+    # Direct so [tool.uv.sources] can route it: torch arrives transitively
+    # via sentence-transformers, and uv2nix/uv only apply sources to
+    # packages declared here.
+    "torch",
+    # Direct + pinned by contract (CI tests it). Its macOS wheels are
+    # cp-versioned, not abi3, so on new CPython it compiles from sdist —
+    # extra-build-dependencies below supplies setuptools for that path.
+    "watchdog",
+]
+
+[project.optional-dependencies]
+# Notebook extras: devShell materialises deps.all (gets jupyterlab);
+# container images materialise deps.default (stays slim — no Jupyter in
+# the gate or victim).
+notebooks = ["jupyterlab"]
+
+# uv2nix reads this (via loadConfig) when a locked package must build from
+# sdist: the setuptools backend rides into its isolated build env. watchdog
+# is the current case (no cp314 macOS wheel exists).
+[tool.uv.extra-build-dependencies]
+watchdog = ["setuptools"]
+
+# Build torch as the CPU wheel on x86_64 Linux (CI + image builds) instead of
+# the ~1GB CUDA default from PyPI. macOS (arm64, CPU+MPS) and aarch64-linux
+# PyPI wheel (CPU-only) don't need the override.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
