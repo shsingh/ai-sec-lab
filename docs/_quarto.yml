@@ -12,6 +12,12 @@ website:
   repo-branch: main
   repo-actions: [edit, issue]
   issue-url: https://github.com/shsingh/ai-sec-lab/issues/new
+  open-graph: true
+  twitter-card: true
+  search:
+    location: navbar
+    type: overlay
+    limit: 50
   navbar:
     background: dark
     pinned: true
@@ -53,9 +59,13 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    toc-title: "Page Contents"
     toc-depth: 3
+    number-sections: false
+    anchor-sections: true
     code-copy: true
     code-overflow: wrap
+    link-external-newtab: true
 
 execute:
   freeze: true   # content pages are static md/qmd — never execute code at render time
