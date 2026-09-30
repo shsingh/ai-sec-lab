@@ -28,12 +28,12 @@
   # 2. Services
   # ---------------------------------------------------------------
 
-  # Docker: builds the laya-gate image; the k3s runtime can use containerd
-  # directly, so docker is here purely for image builds + docker-compose users.
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-  };
+  # Docker daemon: REMOVED. Images are built by Nix (flake packages
+  # .#gate-image/.#victim-image) and streamed straight into k3s's containerd:
+  #   nix run .#load-victim     # docker path (OrbStack) or k3s ctr fallback
+  # k3s runs containerd natively, so no docker daemon is needed anywhere in
+  # the runtime path. docker-compose stays available in the devShell for
+  # anyone following the compose quickstart.
 
   # k3s: the declarative single-node cluster (replaces OrbStack's K8s toggle).
   services.k3s = {
@@ -67,7 +67,10 @@
     kubectl
     kubernetes-helm
     opentofu
-    python312
+    # NOTE: no python here on purpose — the toolchain (and its venv) comes
+    # exclusively from the flake's devShell, which is the same closure that
+    # builds the images. A bare python312 system package invites ad-hoc
+    # pip installs outside the uv.lock contract.
     git
     jq
     yq
@@ -75,7 +78,6 @@
     vim
     htop
     docker-compose
-    # python venv bootstrap happens in the flake devShell (nbdev, laya, nova)
   ];
 
   # KUBECONFIG: point kubectl at the k3s admin config for every user shell.
@@ -101,6 +103,16 @@
   # ---------------------------------------------------------------
   # 5. Base OS bits
   # ---------------------------------------------------------------
+  # OrbStack guest: the machine is booted by OrbStack's own loader, not a
+  # real disk. Declare a nominal root filesystem and keep grub off so the
+  # NixOS bootability assertions don't fire on a container-style guest.
+  fileSystems."/" = {
+    device = "/dev/orbstack-root";
+    fsType = "ext4";
+  };
+  boot.loader.grub.enable = false;
+  boot.loader.systemd-boot.enable = false;
+
   time.timeZone = "Australia/Brisbane";
   system.stateVersion = "24.11";
 }
