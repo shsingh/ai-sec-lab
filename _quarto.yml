@@ -10,6 +10,7 @@ project:
     - "docs/usage.qmd"
     - "docs/performance.qmd"
     - "docs/security.qmd"
+    - "docs/contributing.qmd"
     - "docs/guide/*.qmd"
 
 website:
@@ -45,6 +46,8 @@ website:
         text: Performance
       - href: docs/security.qmd
         text: Security
+      - href: docs/contributing.qmd
+        text: Contributing
     right:
       - icon: github
         href: https://github.com/shsingh/ai-sec-lab
