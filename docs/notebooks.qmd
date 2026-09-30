@@ -1,8 +1,8 @@
 ---
-title: "Notebooks — the linked table of contents"
+title: "Lab code and documentation"
 ---
 
-# AI Security Lab — a real prompt-security edge, proven by real attacks
+## The notebooks and their documentation
 
 A single-node AI prompt-security lab that runs on one Apple-Silicon
 MacBook: a real Kubernetes edge, a real policy gate, a real LLM
@@ -14,7 +14,7 @@ and fails when it is in place.
 This page is the table of contents for the lab. Open a notebook from the table,
 read the description above each cell, run top to bottom, and continue
 with the notebook named in the run-order table. No jumping between directories:
-install once ([INSTALL.md](installation.qmd)), open this page, read, click.
+install once ([Installation](installation.qmd)), open this page, read, click.
 
 
 ## What the lab proves, in run order
@@ -61,7 +61,7 @@ the gate — the unprotected path that makes the two-path proof in
 [05_attacks](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/05_attacks.ipynb) possible.
 
 Set-up and operation live outside the notebooks:
-[INSTALL.md](installation.qmd) covers the one-time machine setup;
+[Installation](installation.qmd) covers the one-time machine setup;
 [USAGE.md](usage.qmd) covers `nbdev_test`, `nbdev_docs`, free play,
 and tear-down.
 

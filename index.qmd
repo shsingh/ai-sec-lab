@@ -8,17 +8,17 @@ MacBook: a Kubernetes Gateway API edge, a policy gate (NOVA + Laya), a
 real LLM application, and an attack corpus. The corpus succeeds against
 the ungated path and returns 403 through the gated edge.
 
-![request path](../assets/mmd/big-picture.svg)
+![request path](assets/mmd/big-picture.svg)
 
 ## Contents
 
 | | Page | Contents |
 |---|---|---|
-| ▸ | **[Install](installation.qmd)** | one-time setup: OrbStack machine, native Ollama, NixOS convergence |
-| ▸ | **[Usage](usage.qmd)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
-| ▸ | **[Guide](guide/index.qmd)** | architecture, design rationale, per-cell walkthrough |
-| ▸ | **[Performance](performance.qmd)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
-| ▸ | **[Notebooks](notebooks.qmd)** | the notebooks' linked table of contents |
+| ▸ | **[Notebooks](docs/notebooks.qmd)** | the lab's linked table of contents — start the click-through here |
+| ▸ | **[Install](docs/installation.qmd)** | one-time setup: OrbStack machine, native Ollama, NixOS convergence |
+| ▸ | **[Usage](docs/usage.qmd)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
+| ▸ | **[Guide](docs/guide/index.qmd)** | architecture, design rationale, per-cell walkthrough |
+| ▸ | **[Performance](docs/performance.qmd)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 
 The repository README carries the same content in repository form;
 [browse the repo](https://github.com/shsingh/ai-sec-lab) for source,
