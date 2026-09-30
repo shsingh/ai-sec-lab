@@ -1,4 +1,4 @@
-%% M5 — toolchain-paths: the flake pins everything; one path on NixOS
+%% Figure 05 — toolchain-paths: the flake pins everything; one path on NixOS
 flowchart TB
     REPO["ai-sec-lab repo<br/>flake.nix + flake.lock"] --> DEV["nix develop<br/>(in the VM)"]
     DEV --> TOOLS["kubectl · helm · opentofu<br/>python3.12 · nbdev · nodejs_22 · jq · yq"]
@@ -13,3 +13,5 @@ flowchart TB
     classDef vm fill:#e8eef7,stroke:#5b7db1
     class REPO,DEV,TOOLS,TEST repo
     class K3S,DOCKER vm
+    classDef plain fill:#e8eef7,stroke:#5b7db1,color:#333
+    class DOCKER,VM plain

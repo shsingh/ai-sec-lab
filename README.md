@@ -68,7 +68,7 @@ first proven real, then proven stopped.
 
 ![big picture](assets/mmd/big-picture.svg)
 
-*Figure M1 — Edge, policy gate, and the vulnerable app. Everything FOSS, everything on one Mac.*
+*Figure 01 — Edge, policy gate, and the vulnerable app. Everything FOSS, everything on one Mac.*
 
 ## The components
 
@@ -97,7 +97,7 @@ block; everything fails closed.
 
 ![four tiers](assets/mmd/four-tier.svg)
 
-*Figure M7 — Cheap tiers first; the LLM judge only sees what they let through; Laya is the backstop.*
+*Figure 06 — Cheap tiers first; the LLM judge only sees what they let through; Laya is the backstop.*
 
 ## Repository map
 
@@ -163,7 +163,7 @@ app, not inside it.
 
 ![why the edge](assets/mmd/why-edge-not-epp.svg)
 
-*Figure M4 — Fail-closed edge enforcement beats in-pool screening.*
+*Figure 04 — Fail-closed edge enforcement beats in-pool screening.*
 
 **A vulnerable AI application, not a simulator.** A simulator cannot be
 coaxed, so behind one the lab could only prove *screening* — that the

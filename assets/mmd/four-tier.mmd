@@ -1,4 +1,4 @@
-%% M7 — four-tier: escalating cost, any tier can block, everything fails closed
+%% Figure 06 — four-tier: escalating cost, any tier can block, everything fails closed
 flowchart TB
     IN(["incoming prompt"]) --> T1["1 · keywords<br/>exact + /regex/i<br/><1 ms · zero cost"]
     T1 -->|"no match"| T2["2 · semantics<br/>MiniLM cosine (0.62)<br/>~15 ms · 90 MB model"]
@@ -16,3 +16,5 @@ flowchart TB
     class T1,T2,T3,T4 tier
     class PASS pass
     class BLOCK block
+    classDef plain fill:#e8eef7,stroke:#5b7db1,color:#333
+    class IN plain

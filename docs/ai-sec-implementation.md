@@ -24,9 +24,9 @@ curl → NGINX Gateway Fabric (HTTPRoute, :80) → nova-gate pod (NOVA rules + L
                                                                     ↘ block → 403, the app never sees it
 ```
 
-![Figure M1 — The big picture: everything on one Mac, everything FOSS.](../assets/mmd/big-picture.svg)
+![Figure 01 — The big picture: everything on one Mac, everything FOSS.](../assets/mmd/big-picture.svg)
 
-*Figure M1 — The big picture. Edge, policy gate, and the vulnerable app — all open source, all on one MacBook.*
+*Figure 01 — The big picture. Edge, policy gate, and the vulnerable app — all open source, all on one MacBook.*
 
 | Layer | Choice | Why |
 |---|---|---|
@@ -39,9 +39,9 @@ curl → NGINX Gateway Fabric (HTTPRoute, :80) → nova-gate pod (NOVA rules + L
 | Toolchain | Nix (nixpkgs pinned in `flake.lock`) | Byte-identical tools on every machine; no "works on my machine" drift |
 | Form | nbdev notebook | Code + tests + prompts + prose in one executable, testable, publishable artefact |
 
-![Figure M2 — Every layer is open source.](../assets/mmd/stack-provenance.svg)
+![Figure 02 — Every layer is open source.](../assets/mmd/stack-provenance.svg)
 
-*Figure M2 — Stack provenance: every box is an open-source component that can be read, audited, and replaced.*
+*Figure 02 — Stack provenance: every box is an open-source component that can be read, audited, and replaced.*
 
 ## The four claims the lab proves
 
@@ -89,9 +89,9 @@ the gate — that unprotected path is what makes the proof in
 [05_attacks.ipynb](../notebooks/05_attacks.ipynb) possible: the attack is
 first proven real, then proven stopped.
 
-![Figure M3 — One prompt's journey through the gate.](../assets/mmd/request-lifecycle.svg)
+![Figure 03 — One prompt's journey through the gate.](../assets/mmd/request-lifecycle.svg)
 
-*Figure M3 — Request lifecycle: NOVA's evaluator tiers fire in escalating order (keywords <1 ms → semantics ~15 ms → LLM judge ~200 ms–2 s), then Laya's decision model as the backstop — fail-closed at every stage.*
+*Figure 03 — Request lifecycle: NOVA's evaluator tiers fire in escalating order (keywords <1 ms → semantics ~15 ms → LLM judge ~200 ms–2 s), then Laya's decision model as the backstop — fail-closed at every stage.*
 
 **Planes mapping (the design's spine):**
 
@@ -127,9 +127,9 @@ blocks with a 403 before any of that exists, and keeps policy decoupled
 from the serving path's version churn — the same reason a WAF sits in
 front of the app, not inside it.
 
-![Figure M4 — Why the gate sits at the edge, not inside the inference layer.](../assets/mmd/why-edge-not-epp.svg)
+![Figure 04 — Why the gate sits at the edge, not inside the inference layer.](../assets/mmd/why-edge-not-epp.svg)
 
-*Figure M4 — The placement argument in one picture: fail-closed edge enforcement beats in-pool screening.*
+*Figure 04 — The placement argument in one picture: fail-closed edge enforcement beats in-pool screening.*
 
 **A vulnerable AI application, not a simulator.** A simulator cannot be
 coaxed, so behind one the lab could only prove *screening* — that the
@@ -177,9 +177,9 @@ The gate pod reaches native Ollama over `host.orb.internal:11434`
 MacBook; no cloud keys anywhere — which is exactly the property a
 security control should have.
 
-![Figure M5 — The flake pins everything; the machine is the declaration.](../assets/mmd/toolchain-paths.svg)
+![Figure 05 — The flake pins everything; the machine is the declaration.](../assets/mmd/toolchain-paths.svg)
 
-*Figure M5 — Toolchain: the flake pins every tool and the NixOS module declares the machine — one path, no drift.*
+*Figure 05 — Toolchain: the flake pins every tool and the NixOS module declares the machine — one path, no drift.*
 
 **Known limits, stated plainly.**
 
@@ -289,9 +289,9 @@ of sophistication and cost:
 | 3 | **llm** | A natural-language judgement question, answered by a hosted LLM | ~200 ms–2 s | an LLM endpoint — **Ollama on the Mac**, zero cloud |
 | 4 | **decision model** | Laya classifies the whole prompt: injection / jailbreak / benign | ~40 ms CPU | ships with the gate (§3) |
 
-![Figure M7 — NOVA's four evaluator tiers.](../assets/mmd/four-tier.svg)
+![Figure 06 — NOVA's four evaluator tiers.](../assets/mmd/four-tier.svg)
 
-*Figure M7 — Cheap tiers first; a match at any tier blocks; a prompt that survives keywords → semantics → LLM judge still faces the Laya decision model before it passes.*
+*Figure 06 — Cheap tiers first; a match at any tier blocks; a prompt that survives keywords → semantics → LLM judge still faces the Laya decision model before it passes.*
 
 The rule sources live in the notebook as tested strings, and the export
 cell materialises them into [`nova-rules/`](../nova-rules/):
@@ -1000,9 +1000,9 @@ def write_terraform(d: Path):
     return (d / "main.tf").exists()
 ```
 
-![Figure M6 — What Terraform creates, in order.](../assets/mmd/deploy-flow.svg)
+![Figure 07 — What Terraform creates, in order.](../assets/mmd/deploy-flow.svg)
 
-*Figure M6 — The deployment graph: one `tofu apply`, ten objects, the whole edge-to-app path.*
+*Figure 07 — The deployment graph: one `tofu apply`, ten objects, the whole edge-to-app path.*
 
 ```python
 # test: tofu validates the generated config

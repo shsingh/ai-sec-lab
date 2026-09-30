@@ -1,4 +1,4 @@
-%% M2 — stack-provenance: every layer is open source
+%% Figure 02 — stack-provenance: every layer is open source
 flowchart LR
     subgraph PROV["OpenTofu (kubernetes provider)"]
         direction TB
@@ -19,3 +19,5 @@ flowchart LR
     classDef foss fill:#e8eef7,stroke:#5b7db1
     class PROVBOX iac
     class NGF,NOVA,LAYA,SIM foss
+    classDef plain fill:#e8eef7,stroke:#5b7db1,color:#333
+    class LAYA,NOVA,PROV,RUNS,SIM plain
