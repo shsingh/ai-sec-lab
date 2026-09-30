@@ -1,9 +1,8 @@
 project:
   type: website
   output-dir: _site
-  # root-level .md files and non-site directories are not site pages — keep the
-  # render input set to index.qmd + docs/** (notebooks stay nbdev-owned .ipynb files)
-  # render targets: the site home + docs/ pages only; nothing else renders
+  # render targets: the site home + docs/ pages only — nothing else renders
+  # (root .md files stay repo docs; notebooks/ stays nbdev-owned .ipynb)
   render:
     - "index.qmd"
     - "docs/notebooks.qmd"
@@ -11,6 +10,71 @@ project:
     - "docs/usage.qmd"
     - "docs/performance.qmd"
     - "docs/guide/*.qmd"
+
+website:
+  title: "AI Security Lab"
+  description: "A single-node AI prompt-security lab on one Apple-Silicon MacBook — Kubernetes edge, NOVA + Laya policy gate, and a two-path attack proof."
+  page-navigation: true
+  site-url: https://shsingh.github.io/ai-sec-lab/
+  repo-url: https://github.com/shsingh/ai-sec-lab
+  repo-subdir: docs
+  repo-branch: main
+  repo-actions: [edit, issue]
+  issue-url: https://github.com/shsingh/ai-sec-lab/issues/new
+  open-graph: true
+  twitter-card: true
+  search:
+    location: navbar
+    type: overlay
+    limit: 50
+  navbar:
+    background: dark
+    pinned: true
+    left:
+      - href: index.qmd
+        text: Home
+      - href: docs/notebooks.qmd
+        text: Notebooks
+      - href: docs/installation.qmd
+        text: Install
+      - href: docs/usage.qmd
+        text: Usage
+      - href: docs/guide/index.qmd
+        text: Guide
+      - href: docs/performance.qmd
+        text: Performance
+    right:
+      - icon: github
+        href: https://github.com/shsingh/ai-sec-lab
+  sidebar:
+    - id: guide
+      title: "Guide"
+      style: floating
+      align: left
+      contents:
+        - docs/guide/index.qmd
+        - docs/guide/what.qmd
+        - docs/guide/why.qmd
+        - docs/guide/how.qmd
+
+  page-footer:
+    left: "ai-sec-lab — FOSS prompt-security lab"
+    right:
+      - icon: github
+        href: https://github.com/shsingh/ai-sec-lab
+
+format:
+  html:
+    theme: cosmo
+    css: docs/styles.css
+    toc: true
+    toc-title: "Page Contents"
+    toc-depth: 3
+    number-sections: false
+    anchor-sections: true
+    code-copy: true
+    code-overflow: wrap
+    link-external-newtab: true
 
 execute:
   freeze: true   # content pages are static md/qmd — never execute code at render time
