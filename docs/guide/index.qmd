@@ -10,5 +10,5 @@ separate implementation document exists; these pages are the reference.
   claims, planes mapping.
 - [Design rationale](why.qmd) — every dependency choice, the hybrid
   constraint, and known limits.
-- [Per-cell walkthrough](how.qmd) — all six notebooks with their code,
+- [Per-step walkthrough](how.qmd) — all six notebooks with their code,
   plus the operating model and the three commands.

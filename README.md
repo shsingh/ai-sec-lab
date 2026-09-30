@@ -27,7 +27,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[INSTALL.md](INSTALL.md)** | one-time setup: OrbStack machine, native Ollama, NixOS convergence |
 | ▸ | **[USAGE.md](USAGE.md)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
 | ▸ | **[notebooks/index.ipynb](notebooks/index.ipynb)** | the notebooks' linked table of contents |
-| ▸ | **[Guide](https://shsingh.github.io/ai-sec-lab/guide/)** | full reference: architecture, rationale, per-cell walkthrough (site; sources in docs/guide/) |
+| ▸ | **[Guide](https://shsingh.github.io/ai-sec-lab/guide/)** | full reference: architecture, rationale, per-step walkthrough (site; sources in docs/guide/) |
 | ▸ | **[PERFORMANCE.md](PERFORMANCE.md)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 | ▸ | **[SECURITY.md](SECURITY.md)** | vulnerability reporting (email + OpenPGP key, GitHub private reporting), security hygiene: Scorecard, Best Practices, Dependency Review, Dependabot, gitleaks, push protection |
 

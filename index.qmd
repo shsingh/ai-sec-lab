@@ -24,7 +24,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[Notebooks](docs/notebooks.qmd)** | the lab's linked table of contents — start the click-through here |
 | ▸ | **[Install](docs/installation.qmd)** | one-time setup: OrbStack machine, native Ollama, NixOS convergence |
 | ▸ | **[Usage](docs/usage.qmd)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
-| ▸ | **[Guide](docs/guide/index.qmd)** | architecture, design rationale, per-cell walkthrough |
+| ▸ | **[Guide](docs/guide/index.qmd)** | architecture, design rationale, per-step walkthrough |
 | ▸ | **[Performance](docs/performance.qmd)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 | ▸ | **[Security](docs/security.qmd)** | vulnerability reporting (email + OpenPGP key, GitHub private reporting) and the repo's security-hygiene inventory |
 
