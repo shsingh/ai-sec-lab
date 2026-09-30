@@ -53,9 +53,12 @@ import sys, re
 p = sys.argv[1]
 t = open(p).read()
 t2 = t.replace('fill="#eaeaea" stroke="#666"', 'fill="#e8eef7" stroke="#5b7db1"')
+if not t2.endswith('\n'):   # keep pre-commit's end-of-file-fixer happy
+    t2 += '\n'
 if t2 != t:
     open(p, "w").write(t2)
-    print("  normalized actor fills")
+    if 'fill="#eaeaea"' in t:
+        print()  # actor fills + EOF newline normalized
 PYEOF
 done
 
