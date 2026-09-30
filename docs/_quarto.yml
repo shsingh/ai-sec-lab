@@ -6,6 +6,12 @@ website:
   title: "AI Security Lab"
   description: "A single-node AI prompt-security lab on one Apple-Silicon MacBook — Kubernetes edge, NOVA + Laya policy gate, and a two-path attack proof."
   page-navigation: true
+  site-url: https://shsingh.github.io/ai-sec-lab/
+  repo-url: https://github.com/shsingh/ai-sec-lab
+  repo-subdir: docs
+  repo-branch: main
+  repo-actions: [edit, issue]
+  issue-url: https://github.com/shsingh/ai-sec-lab/issues/new
   navbar:
     background: dark
     pinned: true
