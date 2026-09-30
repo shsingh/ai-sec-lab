@@ -1,0 +1,71 @@
+---
+title: "Notebooks — the linked table of contents"
+---
+
+# AI Security Lab — a real prompt-security edge, proven by real attacks
+
+A single-node AI prompt-security lab that runs on one Apple-Silicon
+MacBook: a real Kubernetes edge, a real policy gate, a real LLM
+application — and a real attack that succeeds when the gate is removed,
+and fails when it is in place.
+
+## How to use this index
+
+This page is the table of contents for the lab. Open a notebook from the table,
+read the description above each cell, run top to bottom, and continue
+with the notebook named in the run-order table. No jumping between directories:
+install once ([INSTALL.md](installation.qmd)), open this page, read, click.
+
+
+## What the lab proves, in run order
+
+1. The vulnerability is real — on the gate-free path, the canary leaks
+   into the CRM sink (proven by assertion in
+   [05_attacks](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/05_attacks.ipynb)).
+2. The defense is layered, cheap-first — four evaluator tiers short-
+   circuit from <1 ms keywords to the Laya decision model.
+3. The gate holds — every attack category through the edge returns 403
+   and the sink gains nothing.
+4. The gate is transparent — benign prompts return 200 with real model
+   answers.
+
+`nbdev_test --n_workers 0` drives most of the above as an automated
+suite; the `tofu apply` and the real-model leak proof are `# slow`
+cells, run interactively on first setup ([USAGE.md](usage.qmd) lists
+every assertion in order).
+
+## Contents
+
+| Run order | Notebook | What it covers |
+|---|---|---|
+| — | [index](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/index.ipynb) | this contents page |
+| 1 | [00_core](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/00_core.ipynb) | the shared constants (namespace, images, edge URL, victim URL) + the fail-closed shell helper + the cluster front-door test; every other notebook imports from here |
+| 2 | [01_nova_rules](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/01_nova_rules.ipynb) | the four `.nov` rule files, one per evaluator tier (keywords → semantics → LLM judge → full spectrum), each live-scan tested against real attacks |
+| 3 | [02_gate_app](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/02_gate_app.ipynb) | the FastAPI gate — NOVA's four tiers plus the Laya decision model behind one HTTP surface — and its pre-baked container image |
+| 4 | [03_victim](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/03_victim.ipynb) | Atlas, the deliberately vulnerable support assistant: stealable canary in the system prompt, poisoned order note (indirect injection), CRM sink as exfiltration target |
+| 5 | [04_deploy](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/04_deploy.ipynb) | OpenTofu declares and applies all ten cluster objects: namespace → ConfigMap → gate → victim → Gateway → HTTPRoute, then rollouts and the first edge probe |
+| 6 | [05_attacks](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/05_attacks.ipynb) | the two-path proof — the real leak on the direct path, then the same attack corpus blocked 403 at the edge with the sink untouched, plus the free-play scratchpad for rule iteration |
+
+## How a request flows
+
+```
+curl ──▶ NGINX Gateway Fabric (HTTPRoute, :80)
+          └─▶ nova-gate pod
+                ├─ NOVA: keywords → semantics → LLM judge   (fail closed on any hit → 403 JSON)
+                └─ Laya: typed verdict (injection / jailbreak / benign)
+                      └─▶ Atlas pod ──▶ real LLM answer (200)
+```
+
+Atlas is also reachable from inside the cluster (`atlas:8080`) without
+the gate — the unprotected path that makes the two-path proof in
+[05_attacks](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/05_attacks.ipynb) possible.
+
+Set-up and operation live outside the notebooks:
+[INSTALL.md](installation.qmd) covers the one-time machine setup;
+[USAGE.md](usage.qmd) covers `nbdev_test`, `nbdev_docs`, free play,
+and tear-down.
+
+---
+
+The notebooks live in [`notebooks/`](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/)
+in the repository. This site documents the lab; the notebooks run it.
