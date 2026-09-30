@@ -30,3 +30,6 @@ terraform/terraform.tfstate*
 # --- local toolchain records / scratch ---
 .toolchain-path
 nohup.out
+
+/.quarto/
+**/*.quarto_ipynb

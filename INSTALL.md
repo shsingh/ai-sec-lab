@@ -71,6 +71,38 @@ jupyter) comes from `uv.lock` via uv2nix; the tools (kubectl, helm, tofu,
 node) from `flake.lock`. Both locks rebuild byte-identically on any
 colleague's Mac, a CI runner, or inside the VM.
 
+
+## How this is declarative (for non-Nix readers)
+
+Everything the lab builds comes from a file you can read, not a command
+you run. Four artifacts carry the whole toolchain:
+
+- `flake.lock` — pins every *tool* (kubectl, helm, tofu, node, uv) to an
+  exact nixpkgs revision. `nix develop` gives those exact binaries to
+  any shell on any machine.
+- `pyproject.toml` + `uv.lock` — pins every *Python package* (nbdev,
+  laya, nova-hunting, fastapi, torch, jupyter). `nix develop` does not
+  run pip: it materialises this exact locked venv, from hashes. Renovate
+  bumps it; CI re-runs the contract tests against the bump.
+- `nix/images.nix` — declares both *container images*: venv layer, model
+  layer (MiniLM pinned to a Hugging Face revision, per-file sha256),
+  app/rules layer. Docker only ever *loads* the finished stream —
+  `nix run .#load-gate` — it never assembles an image from a floating
+  base. The same derivation is what CI builds, so what you run is what
+  was tested.
+- `terraform/.terraform.lock.hcl` — pins the tofu *provider* hashes;
+  CI validates against it with `init -lockfile=readonly`, so the plan
+  is reproducible too (state aside, apply remains a human decision).
+
+Nix itself is the package manager + build language; the flake is the
+repo's single entry point declaring inputs (nixpkgs revision, uv2nix
+stack) and outputs (devShell, images, apps, the NixOS machine). If you
+have used Terraform or Kubernetes YAML, the mental model transfers:
+declarative text, reviewed as diffs, converged by a tool whose only job
+is to make reality match the text. A useful side effect on this Apple
+Silicon setup: the declared machine needs no docker daemon — k3s runs
+containerd natively and the flake streams images straight into it.
+
 ## Part 3 — Edge access (one line)
 
 The edge is a Gateway-API NodePort pinned to **80** on the VM, not a load

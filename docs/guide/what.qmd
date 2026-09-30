@@ -23,7 +23,7 @@ curl → NGINX Gateway Fabric (HTTPRoute, :80) → nova-gate pod (NOVA rules + L
 | Policy | NOVA framework (`.nov` rules) | YARA-for-prompts: keyword → semantic → LLM evaluators, rules as auditable text in Git |
 | Decision | Laya (open weights, Apache-2.0) | 421M-param classifier: injection / jailbreak / benign in one forward pass; runs on M-series CPU |
 | Target | **Atlas** — deliberately vulnerable support assistant | A *real* app (real LLM chat + tool calls via the Metal seam) whose leaks are provable — a simulator can only verify string-blocking, not attack success |
-| Toolchain | Nix (nixpkgs pinned in `flake.lock`) | Byte-identical tools on every machine; no "works on my machine" drift |
+| Toolchain | Nix flake — two locks (`flake.lock` + `uv.lock`), flake-built images, committed tofu provider lock | Byte-identical tools, packages, images, and provider hashes on every machine; declarative in the same sense as the IaC row — see Why page |
 | Form | nbdev notebook | Code + tests + prompts + prose in one executable, testable, publishable artefact |
 
 ![Figure 02 — Every layer is open source.](../../assets/mmd/stack-provenance.svg)
@@ -59,7 +59,7 @@ curl → NGINX Gateway Fabric (HTTPRoute, :80) → nova-gate pod (NOVA rules + L
 | Atlas | deliberately vulnerable support assistant — real LLM, tool loop, CRM sink | `atlas` pod | [`gate/victim_app.py`](https://github.com/shsingh/ai-sec-lab/blob/main/gate/victim_app.py) |
 | Ollama | hosts the models at native Metal speed; the one host↔VM seam | macOS host | nothing to configure |
 | OpenTofu | declares all ten cluster objects; `apply` = converged | runs in the VM | [`terraform/main.tf`](https://github.com/shsingh/ai-sec-lab/blob/main/terraform/main.tf) |
-| NixOS flake | declares the machine: k3s, docker, toolchain | the VM | [`flake.nix`](https://github.com/shsingh/ai-sec-lab/blob/main/flake.nix) + [`nixos/configuration.nix`](https://github.com/shsingh/ai-sec-lab/blob/main/nixos/configuration.nix) |
+| NixOS flake | declares the machine (k3s), the toolchain (two locks), the images (no docker daemon), the tofu wrapper | the VM + CI | [`flake.nix`](https://github.com/shsingh/ai-sec-lab/blob/main/flake.nix) + [`nixos/configuration.nix`](https://github.com/shsingh/ai-sec-lab/blob/main/nixos/configuration.nix) |
 
 ## How a request flows
 
