@@ -38,7 +38,7 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@91dabb203fce7f899d10ef8e482d94b00f397cbc # main@2026-06-17
 
       - name: Render site
-        run: quarto render ./docs   # renders only docs/ input pages; _site lands at repo root
+        run: quarto render   # project render; excludes keep root docs files out; _site at repo root
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@98ef48e41587a300b82de4cf298aa98b57b2faae # main@2026-06-04
