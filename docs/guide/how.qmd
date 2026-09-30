@@ -1,12 +1,13 @@
 ---
-title: "Per-cell walkthrough"
+title: "Per-step walkthrough"
 ---
 
 Setup is the three-part procedure in
 [Installation](../installation.qmd) — OrbStack machine, native Ollama,
 NixOS convergence. Operation (non-interactive runs, rule iteration,
 publish, tear-down) is [Usage](../usage.qmd). This page walks every
-notebook cell in run order, with the code that does the work:
+operation step in run order — the notebook cell that performs it, with
+the code that does the work:
 [00_core](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/00_core.ipynb) → [01_nova_rules](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/01_nova_rules.ipynb)
 → [02_gate_app](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/02_gate_app.ipynb) → [03_victim](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/03_victim.ipynb)
 → [04_deploy](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/04_deploy.ipynb) → [05_attacks](https://github.com/shsingh/ai-sec-lab/blob/main/notebooks/05_attacks.ipynb).
