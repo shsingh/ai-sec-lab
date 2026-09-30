@@ -26,6 +26,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[Usage](docs/usage.qmd)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
 | ▸ | **[Guide](docs/guide/index.qmd)** | architecture, design rationale, per-cell walkthrough |
 | ▸ | **[Performance](docs/performance.qmd)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
+| ▸ | **[Security](docs/security.qmd)** | vulnerability reporting (email + OpenPGP key, GitHub private reporting) and the repo's security-hygiene inventory |
 
 The repository README carries the same content in repository form;
 [browse the repo](https://github.com/shsingh/ai-sec-lab) for source,
