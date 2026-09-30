@@ -1,0 +1,16 @@
+/* site theme minor adjustments */
+.navbar-brand img {
+  margin-right: 8px;
+}
+h2#toc-heading {
+  font-weight: 600;
+}
+figure figcaption {
+  font-size: 0.9em;
+  color: #555;
+}
+/* wide SVGs don't stretch on mobile */
+img.figure-img {
+  max-width: 100%;
+  height: auto;
+}

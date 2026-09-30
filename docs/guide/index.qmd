@@ -1,0 +1,14 @@
+---
+title: "Guide — overview"
+---
+
+The lab reference in three pages. Page titles map to the repository
+document [docs/ai-sec-implementation.md](https://github.com/shsingh/ai-sec-lab/blob/main/docs/ai-sec-implementation.md),
+which holds the same text for in-repo reading.
+
+- [What](what.qmd) — the system and its proof: components, request path,
+  claims, planes mapping.
+- [Why](why.qmd) — design rationale for every dependency, plus known
+  limits.
+- [How](how.qmd) — the per-cell walkthrough of all six notebooks with
+  their code, plus the operating model and the three commands.

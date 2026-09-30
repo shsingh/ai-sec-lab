@@ -1,0 +1,55 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "AI Security Lab"
+  description: "A single-node AI prompt-security lab on one Apple-Silicon MacBook — Kubernetes edge, NOVA + Laya policy gate, and a two-path attack proof."
+  page-navigation: true
+  navbar:
+    background: dark
+    pinned: true
+    left:
+      - href: index.qmd
+        text: Home
+      - href: installation.qmd
+        text: Install
+      - href: usage.qmd
+        text: Usage
+      - href: guide/index.qmd
+        text: Guide
+      - href: performance.qmd
+        text: Performance
+      - href: notebooks.qmd
+        text: Notebooks
+    right:
+      - icon: github
+        href: https://github.com/shsingh/ai-sec-lab
+  sidebar:
+    - id: guide
+      title: "Guide"
+      style: floating
+      align: left
+      contents:
+        - guide/index.qmd
+        - guide/what.qmd
+        - guide/why.qmd
+        - guide/how.qmd
+
+  page-footer:
+    left: "ai-sec-lab — FOSS prompt-security lab"
+    right:
+      - icon: github
+        href: https://github.com/shsingh/ai-sec-lab
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+
+execute:
+  freeze: true   # content pages are static md/qmd — never execute code at render time

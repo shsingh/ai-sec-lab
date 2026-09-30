@@ -1,0 +1,123 @@
+---
+title: "Installation"
+---
+
+# Installation
+
+The one-time setup for the lab: an OrbStack NixOS machine, native Ollama
+on the Mac, and a converged NixOS declaration. Roughly ten minutes, in
+three parts, and the only imperative steps in the entire lab.
+
+## Prerequisites
+
+- A Mac with Apple silicon, macOS 15 or later, ≥16 GB RAM (≥8 GB free for
+  the VM).
+- [Homebrew](https://brew.sh).
+- This repository cloned locally — OrbStack shares the Mac home into the
+  VM, so the clone lives at the same path on both sides.
+
+## Part 1 — OrbStack, the lab machine, and native Ollama
+
+All of this runs on the Mac. It is one-time; every later step is
+declarative text in the repository.
+
+```bash
+brew install orbstack ollama          # the two host-side dependencies
+brew services start ollama            # serves 127.0.0.1:11434
+ollama pull llama3.2:3b               # ~2 GB — the NOVA LLM-tier judge
+ollama pull gemma4:12b-mlx            # ~8 GB — Atlas's engine (Metal-native MLX build)
+curl -s http://127.0.0.1:11434/v1/models | head -3   # sanity: both models listed
+orb create nixos aisec-lab            # ~40 s; the machine whose state the flake declares
+```
+
+**Why Ollama stays native on the Mac.** An OrbStack Linux machine runs on
+Apple's Virtualization.framework, which exposes no GPU/Metal to guests —
+containerized inference inside the VM is CPU-only, 3–6× slower than
+native on Apple Silicon (measured publicly on 8B-class models). So the
+two model workloads — the LLM-tier judge (`llama3.2:3b`) and Atlas's
+engine (`gemma4:12b-mlx`) — run on the Mac at full Metal speed, and the
+pods reach them over OrbStack DNS at `host.orb.internal:11434`. That
+host↔VM boundary is the lab's single hybrid seam; everything else is
+declared, converged, and reproducible inside the NixOS machine.
+
+**Why the models are these models.**
+
+| Role | Model | Size | Why this one |
+|---|---|---|---|
+| NOVA LLM-tier judge | `llama3.2:3b` | ~2 GB | Reads intent in ~200 ms–2 s per judgement on the Mac's GPU |
+| Atlas engine | `gemma4:12b-mlx` | ~8 GB | Behaves like a real assistant (multi-turn tool loop, instruction following); MLX build = native Metal speed |
+| NOVA semantics tier | `all-MiniLM-L6-v2` | ~90 MB | Automatic on first scan; pre-baked into the gate image at build time |
+| Laya decision model | (bundled with `laya[serve]`) | ~808 MB | Typed injection/jailbreak/benign verdict, one CPU forward pass; loads on gate-container boot |
+
+## Part 2 — Converge the NixOS machine (the only apply step)
+
+The machine is declared by [`flake.nix`](https://github.com/shsingh/ai-sec-lab/blob/main/flake.nix) +
+[`nixos/configuration.nix`](https://github.com/shsingh/ai-sec-lab/blob/main/nixos/configuration.nix): k3s (single node,
+traefik + servicelb off), containerd/docker for image builds, the hosts
+entry, and `KUBECONFIG` for every shell. One rebuild converges a fresh
+OrbStack machine into a working lab — no setup scripts to drift.
+
+```bash
+# from the Mac; the clone is shared into the VM at the same path:
+cd /path/to/ai-sec-lab
+orb -m aisec-lab sudo nixos-rebuild switch --flake "/path/to/ai-sec-lab#aisec-lab"
+
+# then enter the pinned toolchain, inside the VM:
+orb -m aisec-lab
+nix develop        # kubectl, helm, tofu, python, jupyter — pinned by flake.lock
+echo $KUBECONFIG   # /etc/rancher/k3s/k3s.yaml — picked up automatically
+kubectl get nodes  # expect: one Ready node, named aisec-lab
+```
+
+`nix develop` provisions its virtualenv on first entry (`nbdev`, `laya`,
+`nova-hunting[semantic]`, `fastapi`, `jupyter`). The same `flake.lock`
+rebuilds a byte-identical environment on any colleague's Mac or a CI
+runner.
+
+## Part 3 — Edge access (one line)
+
+The edge is a Gateway-API NodePort pinned to **80** on the VM, not a load
+balancer. OrbStack forwards VM ports to Mac localhost automatically, so
+one hosts entry makes the same URL answer on both sides:
+
+```bash
+sudo sh -c 'echo "127.0.0.1  ai-sec.lab.internal" >> /etc/hosts'   # on the Mac, once
+```
+
+Inside the VM the same mapping is already declared by
+`nixos/configuration.nix` — no hosts edit needed there. The k3s NodePort
+range is widened to `80-32767` in the same file, which is what makes
+port 80 a legal NodePort for the NGINX Gateway Fabric service.
+
+## Verify the toolchain (test #0)
+
+```bash
+kubectl version --client && tofu version && python -c "import laya, nova; print('laya + nova importable')"
+```
+
+## Performance
+
+Ollama residency, context, and keep-alive tuning for the two host models is
+measured and documented in [Performance](performance.qmd). The default
+posture (no tuning) suits the reference machine; smaller hosts pin
+context per use case.
+
+## Where the notebook runs
+
+Start Jupyter **inside the VM** (it must run where `kubectl`/`tofu` and
+`KUBECONFIG` live) and browse **from the Mac** — OrbStack forwards VM
+ports to Mac localhost automatically:
+
+```bash
+orb -m aisec-lab                     # VM shell
+cd /path/to/ai-sec-lab && nix develop
+jupyter notebook                     # or: jupyter lab
+# → open http://localhost:8888 on the Mac
+```
+
+Cells execute in the VM; outputs appear in the Mac browser. (VS Code
+equivalent: attach a window to the VM — `code --remote ssh-remote+aisec-lab`
+— and open the repository.)
+
+See [Usage](usage.qmd) for what to run next — the notebook run order,
+the acceptance tests, and free-play operation.
