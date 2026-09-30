@@ -23,7 +23,9 @@ website:
     pinned: true
     left:
       - href: docs/index.qmd
-        text: Home
+        text: Notebooks
+      - href: docs/overview.qmd
+        text: Overview
       - href: docs/installation.qmd
         text: Install
       - href: docs/usage.qmd
@@ -32,8 +34,6 @@ website:
         text: Guide
       - href: docs/performance.qmd
         text: Performance
-      - href: docs/notebooks.qmd
-        text: Notebooks
     right:
       - icon: github
         href: https://github.com/shsingh/ai-sec-lab
