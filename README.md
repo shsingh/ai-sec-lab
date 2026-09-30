@@ -4,7 +4,7 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shsingh/ai-sec-lab)](https://github.com/shsingh/ai-sec-lab/graphs/commit-activity)
 [![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/shsingh/ai-sec-lab)](https://libraries.io/github/shsingh/ai-sec-lab)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/shsingh/ai-sec-lab/main.svg)](https://results.pre-commit.ci/latest/github/shsingh/ai-sec-lab/main)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/shsingh/ai-sec-lab/badge)](https://api.securityscorecards.dev/projects/github.com/shsingh/ai-sec-lab)
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/shsingh/ai-sec-lab?label=OpenSSF%20Scorecard&style=flat)](https://api.securityscorecards.dev/projects/github.com/shsingh/ai-sec-lab)
 
 [![ci](https://github.com/shsingh/ai-sec-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/ci.yml)
 [![dep-contract](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/dep-contract.yml)
