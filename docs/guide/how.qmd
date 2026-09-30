@@ -27,8 +27,8 @@ import json, os, subprocess
 LAB = Path(os.environ.get("AI_SEC_LAB", Path.cwd()))   # run from the repo root — nbdev_test does
 
 NS           = "ai-sec"                           # every object lands in this namespace
-GATE_IMAGE   = "ai-sec-lab/laya-gate:1.0.0"       # built from gate/Dockerfile (02_gate_app)
-VICTIM_IMAGE = "ai-sec-lab/atlas-victim:1.0.0"    # built from gate/victim_Dockerfile (03_victim)
+GATE_IMAGE   = "ai-sec-lab/laya-gate:1.1.0"       # built by the nix flake (02_gate_app)
+VICTIM_IMAGE = "ai-sec-lab/atlas-victim:1.1.0"    # built by the nix flake (03_victim)
 EDGE_URL     = "http://ai-sec.lab.internal"       # PROTECTED path: Gateway → gate (04_deploy)
 VICTIM_SVC   = "http://atlas.ai-sec.svc.cluster.local:8080"   # UNPROTECTED path, cluster-internal only
 ```
@@ -363,31 +363,17 @@ async def gate(request: Request):
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)'''
 
-GATE_DOCKERFILE = '''
-FROM python:3.12-slim
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
-# [semantic] extra = sentence-transformers + the MiniLM model used by NOVA's semantics tier
-RUN pip install --no-cache-dir "laya[serve]" "nova-hunting[semantic]" fastapi uvicorn httpx
-# pre-download the semantic model at build time so first scan is warm
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
-WORKDIR /app
-COPY app.py /app/app.py
-ENV PYTHONUNBUFFERED=1 LAYA_HOME=/models
-VOLUME /models
-EXPOSE 8000
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]'''
-
 def write_gate(d: Path):
     d.mkdir(parents=True, exist_ok=True)
     (d / "app.py").write_text(GATE_APP)
-    (d / "Dockerfile").write_text(GATE_DOCKERFILE)
     return sorted(p.name for p in d.iterdir())
 ```
 
 Points worth noting in `GATE_APP`: `_prompt()` extracts the last user
 message (the object being attacked); the audit line prints verdict +
 engine per decision — the field 05_attacks's audit test asserts on;
-`OLLAMA_URL` is the Metal seam; the Dockerfile pre-bakes MiniLM so the
+`OLLAMA_URL` is the Metal seam; the flake pre-bakes MiniLM (pinned to
+an HF repo revision, hash-verified — see `nix/images.nix`) so the
 semantics tier is warm on first boot.
 
 The gate test then loads the same on-disk rules with the exact policy
@@ -551,20 +537,9 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
 '''
 
-VICTIM_DOCKERFILE = '''
-FROM python:3.12-slim
-RUN pip install --no-cache-dir fastapi uvicorn httpx
-WORKDIR /app
-COPY victim_app.py /app/victim_app.py
-ENV PYTHONUNBUFFERED=1
-EXPOSE 8080
-CMD ["uvicorn", "victim_app:app", "--host", "0.0.0.0", "--port", "8080"]
-'''
-
 def write_victim(d: Path):
     d.mkdir(parents=True, exist_ok=True)
     (d / "victim_app.py").write_text(VICTIM_APP)
-    (d / "victim_Dockerfile").write_text(VICTIM_DOCKERFILE)
     return sorted(p.name for p in d.iterdir())
 ```
 
@@ -610,7 +585,7 @@ MAIN_TF = '''
 terraform {
   required_version = ">= 1.7"
   required_providers {
-    kubernetes = { source = "hashicorp/kubernetes", version = "~> 2.31" }
+    kubernetes = { source = "hashicorp/kubernetes", version = "~> 3.0" }
   }
 }
 provider "kubernetes" { config_path = "~/.kube/config" }
@@ -641,7 +616,7 @@ resource "kubernetes_deployment" "nova_gate" {
       spec {
         container {
           name  = "gate"
-          image = "ai-sec-lab/laya-gate:1.0.0"
+          image = "ai-sec-lab/laya-gate:1.1.0"
           port { container_port = 8000 }
           env {
             name  = "NOVA_RULES_DIR"; value = "/rules"
@@ -700,7 +675,7 @@ resource "kubernetes_deployment" "atlas" {
       spec {
         container {
           name  = "atlas"
-          image = "ai-sec-lab/atlas-victim:1.0.0"
+          image = "ai-sec-lab/atlas-victim:1.1.0"
           port { container_port = 8080 }
           env {
             name  = "OLLAMA_URL"
@@ -804,6 +779,26 @@ r = sh("cd terraform && tofu init -input=false && tofu validate")
 print("tofu validate: OK")
 ```
 
+After the validate cell, both container images are built — by **Nix,
+not docker** (`nix/images.nix`). The old `docker build gate/` path had an
+unpinned base image, unpinned pip layers, and an un-pinned MiniLM
+download; the flake rebuilds all three from hashes (pyproject.toml +
+uv.lock for the python closure, the HF repo revision for the model weights).
+
+```python
+# slow
+# Build both images with Nix and stream them into the Mac's (or VM's)
+# docker; k3s pulls them from there. First run ~10-15 min (torch
+# closure); after that it's seconds (store hits).
+sh("nix run .#load-victim")
+sh("nix run .#load-gate")
+```
+
+Two `Loaded image:` lines come back — `ai-sec-lab/atlas-victim:1.1.0`
+and `ai-sec-lab/laya-gate:1.1.0`. `streamLayeredImage` emits a
+docker-loadable stream directly (layer-correct, no archive staging), and
+`.#load-*` pipes it into `docker load`.
+
 ```python
 # slow
 # apply (cell intentionally separate so docs show the apply step explicitly)
@@ -811,9 +806,9 @@ r = sh("cd terraform && tofu apply -auto-approve")
 print(r.stdout[-400:])
 ```
 
-The apply cell is flagged `# slow`, so `nbdev_test` skips it — run it
-interactively. First run takes ~1 min (image pulls); subsequent runs are
-no-ops unless something changed. Expected: `Apply complete! Resources: 8
+The apply cells are flagged `# slow`, so `nbdev_test` skips them — run
+them interactively. First run: the Nix build streams ~1 GB of layers.
+Subsequent runs are no-ops unless something changed. Expected: `Apply complete! Resources: 8
 added…`.
 
 ```python
