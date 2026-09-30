@@ -26,7 +26,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[INSTALL.md](INSTALL.md)** | one-time setup: OrbStack machine, native Ollama, NixOS convergence |
 | ▸ | **[USAGE.md](USAGE.md)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
 | ▸ | **[notebooks/index.ipynb](notebooks/index.ipynb)** | the notebooks' linked table of contents |
-| ▸ | **[docs/ai-sec-implementation.md](docs/ai-sec-implementation.md)** | full reference: architecture, rationale, per-cell walkthrough |
+| ▸ | **[Guide](https://shsingh.github.io/ai-sec-lab/guide/)** | full reference: architecture, rationale, per-cell walkthrough (site; sources in docs/guide/) |
 | ▸ | **[PERFORMANCE.md](PERFORMANCE.md)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 
 ## Test results
@@ -132,7 +132,7 @@ lab-repo/
 ├── terraform/
 │   └── main.tf                # namespace → configmap → gate → victim → Gateway → HTTPRoute
 ├── docs/
-│   └── ai-sec-implementation.md  # full reference: architecture, rationale, per-cell walkthrough
+│   └── guide/                   # the site's split guide pages (what / why / how)
 ├── assets/mmd/                # mermaid sources + theme config + render script
 └── settings.ini               # nbdev config (nbs_path = notebooks)
 ```

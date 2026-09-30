@@ -2,9 +2,9 @@
 title: "Guide — overview"
 ---
 
-The lab reference in three pages. Page titles map to the repository
-document [docs/ai-sec-implementation.md](https://github.com/shsingh/ai-sec-lab/blob/main/docs/ai-sec-implementation.md),
-which holds the same text for in-repo reading.
+The lab reference in three pages. The pages are the repository's own
+documents, rendered by the site from sources in `docs/guide/` — no
+separate implementation document exists; these pages are the reference.
 
 - [What](what.qmd) — the system and its proof: components, request path,
   claims, planes mapping.
