@@ -7,7 +7,7 @@
 # lets nova-hunting/fastapi/uvicorn/httpx/nbdev float to their uv.lock-
 # current versions. See INSTALL.md for the canonical (nix develop) path.
 nbdev>=2.3
-laya[serve]==0.3.24
+laya[serve]==0.3.26
 nova-hunting[semantic]
 fastapi
 uvicorn
