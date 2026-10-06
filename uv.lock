@@ -32,7 +32,7 @@ requires-dist = [
     { name = "fastapi" },
     { name = "httpx" },
     { name = "jupyterlab", marker = "extra == 'notebooks'" },
-    { name = "laya", extras = ["serve"], specifier = "==0.3.26" },
+    { name = "laya", extras = ["serve"], specifier = "==0.3.28" },
     { name = "nbdev", specifier = ">=2.3" },
     { name = "nova-hunting", extras = ["semantic"] },
     { name = "torch", index = "https://download.pytorch.org/whl/cpu" },
@@ -1069,7 +1069,7 @@ wheels = [
 
 [[package]]
 name = "laya"
-version = "0.3.26"
+version = "0.3.28"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
@@ -1079,9 +1079,9 @@ dependencies = [
     { name = "torch", version = "2.14.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform != 'darwin'" },
     { name = "transformers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/85/a1/bc4ac3a75a3e81014d9782c96dad008131f566aaa75366c3d93da2af109a/laya-0.3.26.tar.gz", hash = "sha256:a6c56b0f7ab365e2e048c259bf1383805d39644e44922ec1bfb25da6c93d5a9b", size = 894229, upload-time = "2026-10-03T17:51:50.408Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ed/52/108b9fda4e5bcd56d64db83e2c173981b64793c1f20b7e97f6cfc7542d5e/laya-0.3.28.tar.gz", hash = "sha256:8122301a5021e9fa56d8a6dba11d3bc7ae262d4f2f25dd9504344ebed9b26cbd", size = 995350, upload-time = "2026-10-05T18:05:14.58Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/a5/1b2d1411df6661eaf05c18aa9c30bb95904307f7e283f02fb762ddef97e9/laya-0.3.26-py3-none-any.whl", hash = "sha256:edd049719af725712ae1ca0af2b2e8997287d49098ff47686945e26ab23c21f4", size = 312721, upload-time = "2026-10-03T17:51:48.591Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/73/c2beaece06283911d53823f1735c7a033e07a1e690735ea02d8d57706d69/laya-0.3.28-py3-none-any.whl", hash = "sha256:a1493cff474c0a5d84861db55c0c5c9b17f1db8561e458764da9a322dc542a88", size = 360039, upload-time = "2026-10-05T18:05:12.64Z" },
 ]
 
 [package.optional-dependencies]

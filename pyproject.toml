@@ -9,7 +9,7 @@ description = "AI Security lab — NOVA hunting + Laya gate (declarative toolcha
 requires-python = ">=3.14"
 dependencies = [
     "nbdev>=2.3",
-    "laya[serve]==0.3.26",
+    "laya[serve]==0.3.28",
     "nova-hunting[semantic]",  # semantic extra = sentence-transformers + MiniLM
     "fastapi",
     "uvicorn",
