@@ -32,7 +32,7 @@ requires-dist = [
     { name = "fastapi" },
     { name = "httpx" },
     { name = "jupyterlab", marker = "extra == 'notebooks'" },
-    { name = "laya", extras = ["serve"], specifier = "==0.4.1" },
+    { name = "laya", extras = ["serve"], specifier = "==0.4.2" },
     { name = "nbdev", specifier = ">=2.3" },
     { name = "nova-hunting", extras = ["semantic"] },
     { name = "torch", index = "https://download.pytorch.org/whl/cpu" },
@@ -1069,7 +1069,7 @@ wheels = [
 
 [[package]]
 name = "laya"
-version = "0.4.1"
+version = "0.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
@@ -1079,9 +1079,9 @@ dependencies = [
     { name = "torch", version = "2.14.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform != 'darwin'" },
     { name = "transformers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/05/26/48881effdec3cd73ad4e919c38fbcee1ddb5efd732c5b65cbd8edda8e773/laya-0.4.1.tar.gz", hash = "sha256:3c56d346a2ca3835fd92d3f4bd7ec8cbe50ffe03dc5d53520dd2b72c9770dca0", size = 1073361, upload-time = "2026-10-08T17:29:22.678Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/a0/8dfa9423557d2b4d439b3571f2f99a029e6d7cf7a87155df264713e1286f/laya-0.4.2.tar.gz", hash = "sha256:aff6f51438ec1df41c97191fb13a4cbb423febe6f4fb27cbc131aeabaa04176a", size = 1090157, upload-time = "2026-10-10T09:25:33.812Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b8/f6/9e3f039d08319e153721210667548e2cac1679b56461c8b5e81acc93b4db/laya-0.4.1-py3-none-any.whl", hash = "sha256:5252730d8be604aecdc6c52adeb591e75d2b97ef3f52278cba9b37e403c784c7", size = 371890, upload-time = "2026-10-08T17:29:20.679Z" },
+    { url = "https://files.pythonhosted.org/packages/a6/d1/8d1d18b6645c729612a2e3008cba79b6b1fa1420b6a5df026650df2a7321/laya-0.4.2-py3-none-any.whl", hash = "sha256:126284550840e8fc2445f9cd4c808e505d25d457242e7de5658b2cb9f9155b26", size = 380522, upload-time = "2026-10-10T09:25:31.902Z" },
 ]
 
 [package.optional-dependencies]
