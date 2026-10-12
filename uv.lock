@@ -32,7 +32,7 @@ requires-dist = [
     { name = "fastapi" },
     { name = "httpx" },
     { name = "jupyterlab", marker = "extra == 'notebooks'" },
-    { name = "laya", extras = ["serve"], specifier = "==0.4.4" },
+    { name = "laya", extras = ["serve"], specifier = "==0.4.6" },
     { name = "nbdev", specifier = ">=2.3" },
     { name = "nova-hunting", extras = ["semantic"] },
     { name = "torch", index = "https://download.pytorch.org/whl/cpu" },
@@ -1069,7 +1069,7 @@ wheels = [
 
 [[package]]
 name = "laya"
-version = "0.4.4"
+version = "0.4.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
@@ -1079,9 +1079,9 @@ dependencies = [
     { name = "torch", version = "2.14.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform != 'darwin'" },
     { name = "transformers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/20/a2/ea4980cad1413e8d8799acaf1f2896be85c1a6ed2813b509f99669f3386e/laya-0.4.4.tar.gz", hash = "sha256:047e61f8f823b61b424cc655d41d76b6cd8f8bb9f2a6a973874fca7b06d2b027", size = 1148141, upload-time = "2026-10-12T03:58:31.415Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/60/dd/a66670c1327b0886b210c220337640d9a7aa2811a8db5746ed279e01f400/laya-0.4.6.tar.gz", hash = "sha256:64ec85c8650f2c6033898da6c9e7134ad4d06c48635b71e51f865970c9a1a901", size = 1163178, upload-time = "2026-10-12T09:35:00.991Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/6d/50f830ed4b3870a679bd10ad36a11c65583d4282fc2ad68819bc69025b35/laya-0.4.4-py3-none-any.whl", hash = "sha256:4c34362b2acc9bd7a00b780c40526a88e80c3e290115e6619859fc905755e206", size = 390776, upload-time = "2026-10-12T03:58:29.787Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/48/b3908f48b566fe5379a36e39f38d4531db0081807e9bc56a10bfe4ba875f/laya-0.4.6-py3-none-any.whl", hash = "sha256:93fab7677aab9cb71cd4f9cb4477e334618f85ccdff684520a5dd144c3316a88", size = 391896, upload-time = "2026-10-12T09:34:58.977Z" },
 ]
 
 [package.optional-dependencies]
