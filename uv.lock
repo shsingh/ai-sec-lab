@@ -32,7 +32,7 @@ requires-dist = [
     { name = "fastapi" },
     { name = "httpx" },
     { name = "jupyterlab", marker = "extra == 'notebooks'" },
-    { name = "laya", extras = ["serve"], specifier = "==0.4.8" },
+    { name = "laya", extras = ["serve"], specifier = "==0.4.11" },
     { name = "nbdev", specifier = ">=2.3" },
     { name = "nova-hunting", extras = ["semantic"] },
     { name = "torch", index = "https://download.pytorch.org/whl/cpu" },
@@ -1069,7 +1069,7 @@ wheels = [
 
 [[package]]
 name = "laya"
-version = "0.4.8"
+version = "0.4.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
@@ -1079,9 +1079,9 @@ dependencies = [
     { name = "torch", version = "2.14.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform != 'darwin'" },
     { name = "transformers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4e/2d/a0d23f625a04f8962aa44dfb0a6748243233504510b87f84796cb9b8c7e2/laya-0.4.8.tar.gz", hash = "sha256:979d240d4681a1bf06dda347b55fdb2875bfd2f733779305feb425130ddcac84", size = 1213210, upload-time = "2026-10-15T10:52:26.897Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/9d/497b9f83533b36889760f9c5f1b8ddcc039486d118f97ccebb617c6ee60e/laya-0.4.11.tar.gz", hash = "sha256:e1c21be62dce9a3f1102e053d48c85951215a36bdb99adf8fa79271a152fe855", size = 1297759, upload-time = "2026-10-17T17:03:22.986Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b8/cc/6f7d1ec516a450c42b2ad4c164e9cdbacac509bc808a187ec62e99be81ca/laya-0.4.8-py3-none-any.whl", hash = "sha256:05064d8b949803af8cb173561ed0b24d6be5b62cb86d8d319321577c630d0288", size = 405303, upload-time = "2026-10-15T10:52:24.584Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/b2/b7b8b28604956dcad36867fe23bd4a1b5516cda169fe3e4359f2393afccd/laya-0.4.11-py3-none-any.whl", hash = "sha256:9ea30fb344ec12601447ad90b56b39f01dff8f3ee8784e0f8f4ebc5a43c48c07", size = 430896, upload-time = "2026-10-17T17:03:21.184Z" },
 ]
 
 [package.optional-dependencies]
