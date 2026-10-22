@@ -13,7 +13,7 @@
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot&logoColor=white)](https://github.com/shsingh/ai-sec-lab/blob/main/renovate.json)
 [![pages](https://github.com/shsingh/ai-sec-lab/actions/workflows/pages.yml/badge.svg)](https://github.com/shsingh/ai-sec-lab/actions/workflows/pages.yml)
 
-Live site: https://shsingh.github.io/ai-sec-lab/
+Live site: https://ai-sec-lab.kalatopi.sh/
 
 A single-node AI prompt-security lab that runs on one Apple-Silicon
 MacBook: a Kubernetes Gateway API edge, a policy gate (NOVA + Laya), a
@@ -27,7 +27,7 @@ the ungated path and returns 403 through the gated edge.
 | ▸ | **[INSTALL.md](INSTALL.md)** | one-time setup: OrbStack machine, native Ollama, NixOS convergence |
 | ▸ | **[USAGE.md](USAGE.md)** | operation: `nbdev_test`, notebook run order, rule-iteration workflow, publish, tear-down |
 | ▸ | **[notebooks/index.ipynb](notebooks/index.ipynb)** | the notebooks' linked table of contents |
-| ▸ | **[Guide](https://shsingh.github.io/ai-sec-lab/guide/)** | full reference: architecture, rationale, per-step walkthrough (site; sources in docs/guide/) |
+| ▸ | **[Guide](https://ai-sec-lab.kalatopi.sh/guide/)** | full reference: architecture, rationale, per-step walkthrough (site; sources in docs/guide/) |
 | ▸ | **[PERFORMANCE.md](PERFORMANCE.md)** | measured host/VM resource tuning: model residency, context, keep-alive, pod sizing |
 | ▸ | **[SECURITY.md](SECURITY.md)** | vulnerability reporting (email + OpenPGP key, GitHub private reporting), security hygiene: Scorecard, Best Practices, Dependency Review, Dependabot, gitleaks, push protection |
 | ▸ | **[CONTRIBUTING.md](CONTRIBUTING.md)** | how to contribute: branch + commit conventions, signing, acceptance suite, a worked example PR |
